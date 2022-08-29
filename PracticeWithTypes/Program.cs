@@ -1,26 +1,32 @@
 ﻿using Models;
+using Services;
 
-//Bad change employee
-var employeeBad = new Employee() { Surname = "Ноур", Name = "Олег", PassportId = 42342342, DateBirth = DateTime.Now };
-UpdateContactEmployeeBad(employeeBad);
-Console.WriteLine($"(Bad)Контракт c серией паспорта {employeeBad.PassportId}: \n{employeeBad.Contract}");
+var services = new BankService();
+var employee = new Employee(){Surname = "Соколов",
+    Name = "Сергей",
+    PassportId = 12313123,
+    DateBirth = DateTime.Now
+};
+var client = new Client()
+{
+    Surname = "Николаев",
+    Name = "Борис",
+    DateBirth = DateTime.Now,
+    PassportId = 123123123
+};
 
-//bad change currency
-var currencyBad = new Currency() { Code = 221, Name = "Евро" };
-UpdateCurrencyBad(ref currencyBad);
-Console.WriteLine($"\n(Bad)Код валюты: {currencyBad.Code},\n" +
-                  $"Название валюты: {currencyBad.Name}.");
-//good change employee
-var employeeGood = new Employee()
-    { Surname = "Гурбанова", Name = "Эсьмира", PassportId = 52632342, DateBirth = DateTime.Now };
-employeeGood.Contract = CreateContractGood(employeeGood.Surname, employeeGood.Name, employeeGood.PassportId);
-Console.WriteLine($"\n(Good)Контракт c серией паспорта {employeeGood.PassportId}: \n{employeeGood.Contract}");
-//good change currency
-var currencyGood = new Currency() { Code = 334, Name = "Ены" };
-currencyGood = UpdateCurrencyGood(545, "Кроны");
-Console.WriteLine($"\n(Good)Код валюты: {currencyGood.Code},\n" +
-                  $"Название валюты: {currencyGood.Name}.");
-
+employee.Salary = services.CalculationBankOwnerSalary(3000,
+    300, 5);
+Console.WriteLine($"Зарплата одного из владельцев {employee.Surname}" +
+                  $" {employee.Name}:" +
+                  $" {employee.Salary}");
+var employeeWhoWasClient = new Services.BankService().TransformationClientInEmployee(client);
+var result = employeeWhoWasClient.Name == client.Name &&
+             employeeWhoWasClient.Surname == client.Surname &&
+             employeeWhoWasClient.DateBirth == client.DateBirth &&
+             employeeWhoWasClient.PassportId == client.PassportId &&
+             employeeWhoWasClient is Employee;
+Console.WriteLine("Результат преобразования клиента в сотрудника: "+result);
 static void UpdateContactEmployeeBad(Employee employee)
 {
     var descriptionContract = $"Компания Dex.\n" +
