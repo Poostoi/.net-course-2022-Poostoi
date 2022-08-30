@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeWithTypes", "Practi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{746D4238-F4BC-4120-89BA-341FFAC6EC33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeListAndDictionary", "PracticeListAndDictionary\PracticeListAndDictionary.csproj", "{ABCCDC2E-052A-4ACA-A679-B2AD877A42ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{746D4238-F4BC-4120-89BA-341FFAC6EC33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{746D4238-F4BC-4120-89BA-341FFAC6EC33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{746D4238-F4BC-4120-89BA-341FFAC6EC33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABCCDC2E-052A-4ACA-A679-B2AD877A42ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABCCDC2E-052A-4ACA-A679-B2AD877A42ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABCCDC2E-052A-4ACA-A679-B2AD877A42ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABCCDC2E-052A-4ACA-A679-B2AD877A42ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,5 +50,6 @@ Global
 		{C15AF059-7764-46A8-B60B-FD9CA9FD6CDD} = {2DAB60D7-5A6B-4CEC-A89D-2D0EA563B334}
 		{4A8CEAE7-13A4-4372-AA6C-F49B9ED2EDC4} = {BCDD88E8-992E-4798-A26E-12FB1F55E5A5}
 		{746D4238-F4BC-4120-89BA-341FFAC6EC33} = {2DAB60D7-5A6B-4CEC-A89D-2D0EA563B334}
+		{ABCCDC2E-052A-4ACA-A679-B2AD877A42ED} = {BCDD88E8-992E-4798-A26E-12FB1F55E5A5}
 	EndGlobalSection
 EndGlobal
