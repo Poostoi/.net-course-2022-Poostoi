@@ -1,4 +1,7 @@
 using Models;
+using Bogus;
+using Bogus.DataSets;
+using Currency = Models.Currency;
 
 namespace Services;
 
@@ -14,7 +17,7 @@ public class TestDataGenerator
                 Surname = "Doe",
                 Name = "John",
                 DateBirth = DateTime.Now,
-                NumberPhone = new Random().Next(111111,999999),
+                NumberPhone = new Random().Next(111111, 999999),
                 PassportId = 13123123
             });
         }
@@ -39,6 +42,7 @@ public class TestDataGenerator
 
         return dictionaryClient;
     }
+
     public List<Employee> GenerateListEmployee(int n)
     {
         var listEmployee = new List<Employee>();
@@ -48,13 +52,59 @@ public class TestDataGenerator
             {
                 Surname = "Doe",
                 Name = "John",
-                DateBirth = DateTime.Now.AddDays(new Random().Next(0,100000)),
+                DateBirth = DateTime.Now.AddDays(new Random().Next(0, 100000)),
                 PassportId = 13123123,
                 Contract = "Заключен",
-                Salary = new Random().Next(2000,15000)
+                Salary = new Random().Next(2000, 15000)
             });
         }
 
         return listEmployee;
+    }
+
+    public Dictionary<Client, Account> GenerateDictionaryKeyClientValueAccount(int n)
+    {
+        var faker = new Faker("ru");
+        var dictionaryClient = new Dictionary<Client, Account>();
+        dictionaryClient.Add(
+            new Client()
+            {
+                Surname = "Doe",
+                Name = "John",
+                DateBirth = new DateTime(1990, 4, 28, 13, 23, 6),
+                PassportId = 123123,
+                NumberPhone = 123123
+            }, new Account()
+            {
+                Currency = new Currency
+                {
+                    Code = new Random().Next(0, 2000),
+                    Name = "usd"
+                },
+                Amount = new Random().Next(0, 100000)
+            });
+
+
+        for (int i = 1; i < n; i++)
+        {
+            dictionaryClient.Add(new Client()
+            {
+                Surname = faker.Name.FirstName(Name.Gender.Male),
+                Name = faker.Name.LastName(Name.Gender.Male),
+                DateBirth = faker.Date.Past(new Random().Next(0, 55)),
+                NumberPhone = new Random().Next(111111, 999999),
+                PassportId = new Random().Next(111111, 999999)
+            }, new Account()
+            {
+                Currency = new Currency
+                {
+                    Code = new Random().Next(0, 2000),
+                    Name = "usd"
+                },
+                Amount = new Random().Next(0, 100000)
+            });
+        }
+
+        return dictionaryClient;
     }
 }
