@@ -15,4 +15,13 @@ public class Client:Person
                client.DateBirth == DateBirth &&
                client.PassportId == PassportId;
     }
+
+    public override int GetHashCode()
+    {
+        return NumberPhone.GetHashCode()+
+               Name.GetHashCode()+
+               Surname.GetHashCode()+
+               DateBirth.GetHashCode()+
+               PassportId.GetHashCode();
+    }
 }
