@@ -15,7 +15,7 @@ public class EquivalenceTests
     {
         //arrange
         var dataGenerator = new TestDataGenerator();
-        var dictionaryCurrency = dataGenerator.GenerateDictionaryKeyClientValueAccount(10);
+        var dictionaryAccount = dataGenerator.GenerateDictionaryKeyClientValueAccount(10);
         var client = new Client()
         {
             Surname = "Doe",
@@ -26,7 +26,28 @@ public class EquivalenceTests
         };
         
         //act
-        var expected = dictionaryCurrency[client] is Account;
+        var expected = dictionaryAccount[client] is Account;
+
+        //assert 
+        Assert.True(expected);
+    }
+    [Test]
+    public void GenerateDictionaryKeyClientValueListAccount_Client_ListAccount()
+    {
+        //arrange
+        var dataGenerator = new TestDataGenerator();
+        var dictionaryAccount = dataGenerator.GenerateDictionaryKeyClientValueListAccount(10);
+        var client = new Client()
+        {
+            Surname = "Doe",
+            Name = "John",
+            DateBirth = new DateTime(1990, 4, 28, 13, 23, 6),
+            PassportId = 123123,
+            NumberPhone = 123123
+        };
+        
+        //act
+        var expected = dictionaryAccount[client] is List<Account>;
 
         //assert 
         Assert.True(expected);
@@ -36,7 +57,7 @@ public class EquivalenceTests
     {
         //arrange
         var dataGenerator = new TestDataGenerator();
-        var dictionaryCurrency = dataGenerator.GenerateDictionaryKeyClientValueAccount(10);
+        var dictionaryAccount = dataGenerator.GenerateDictionaryKeyClientValueAccount(10);
         var client = new Client()
         {
             Surname = "Doe",
@@ -47,7 +68,7 @@ public class EquivalenceTests
         };
         Client expected = new Client();
         //act
-        foreach (var element in dictionaryCurrency)
+        foreach (var element in dictionaryAccount)
         {
             if (element.Key.Equals(client))
                 expected = element.Key;
@@ -55,5 +76,26 @@ public class EquivalenceTests
 
         //assert 
         Assert.NotNull(expected);
+    }
+    [Test]
+    public void EqualsEmployee_Employee_True()
+    {
+        //arrange
+        var dataGenerator = new TestDataGenerator();
+        var listEmployee = dataGenerator.GenerateListEmployee(10);
+        var employee = new Employee()
+        {
+            Surname = "Doe",
+            Name = "John",
+            DateBirth = new DateTime(1990, 4, 28, 13, 23, 6),
+            PassportId = 123123,
+            Contract = "Заключён",
+            Salary = 2000
+        };
+        //act
+        var expected = employee.Equals(listEmployee[0]);
+
+        //assert 
+        Assert.True(expected);
     }
 }
