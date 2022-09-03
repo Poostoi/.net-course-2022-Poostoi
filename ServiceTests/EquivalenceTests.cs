@@ -16,17 +16,12 @@ public class EquivalenceTests
         //arrange
         var dataGenerator = new TestDataGenerator();
         var dictionaryAccount = dataGenerator.GenerateDictionaryKeyClientValueAccount(10);
-        var client = new Client()
-        {
-            Surname = "Doe",
-            Name = "John",
-            DateBirth = new DateTime(1990, 4, 28, 13, 23, 6),
-            PassportId = 123123,
-            NumberPhone = 123123
-        };
+        var client = dataGenerator.GeneratingClient();
+        var account = dataGenerator.GeneratingAccount();
         
         //act
-        var expected = dictionaryAccount[client] is Account;
+        dictionaryAccount.Add(client, account);
+        var expected = dictionaryAccount[client].Equals(account);
 
         //assert 
         Assert.True(expected);
@@ -37,65 +32,29 @@ public class EquivalenceTests
         //arrange
         var dataGenerator = new TestDataGenerator();
         var dictionaryAccount = dataGenerator.GenerateDictionaryKeyClientValueListAccount(10);
-        var client = new Client()
-        {
-            Surname = "Doe",
-            Name = "John",
-            DateBirth = new DateTime(1990, 4, 28, 13, 23, 6),
-            PassportId = 123123,
-            NumberPhone = 123123
-        };
-        
+        var client = dataGenerator.GeneratingClient();
+        var accounts = dataGenerator.GeneratingRandomNumberAccount();
         //act
-        var expected = dictionaryAccount[client] is List<Account>;
+        dictionaryAccount.Add(client, accounts);
+        var expected = dictionaryAccount[client].Equals(accounts);
 
         //assert 
         Assert.True(expected);
     }
-    [Test]
-    public void Equals_CheckWork_True()
-    {
-        //arrange
-        var dataGenerator = new TestDataGenerator();
-        var dictionaryAccount = dataGenerator.GenerateDictionaryKeyClientValueAccount(10);
-        var client = new Client()
-        {
-            Surname = "Doe",
-            Name = "John",
-            DateBirth = new DateTime(1990, 4, 28, 13, 23, 6),
-            PassportId = 123123,
-            NumberPhone = 123123
-        };
-        Client expected = new Client();
-        //act
-        foreach (var element in dictionaryAccount)
-        {
-            if (element.Key.Equals(client))
-                expected = element.Key;
-        }
-
-        //assert 
-        Assert.NotNull(expected);
-    }
+    
+    
     [Test]
     public void EqualsEmployee_Employee_True()
     {
         //arrange
         var dataGenerator = new TestDataGenerator();
         var listEmployee = dataGenerator.GenerateListEmployee(10);
-        var employee = new Employee()
-        {
-            Surname = "Doe",
-            Name = "John",
-            DateBirth = new DateTime(1990, 4, 28, 13, 23, 6),
-            PassportId = 123123,
-            Contract = "Заключён",
-            Salary = 2000
-        };
+        var employee = dataGenerator.GeneratingEmployee();
         //act
-        var expected = employee.Equals(listEmployee[0]);
+        listEmployee.Add(employee);
+        var expected = listEmployee.Find(e => e.Equals(employee));
 
         //assert 
-        Assert.True(expected);
+        Assert.NotNull(expected);
     }
 }
