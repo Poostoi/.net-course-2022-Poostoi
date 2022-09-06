@@ -14,7 +14,7 @@ public class EmployeeService
         if (DateTime.Now.Year - employee.DateBirth.Year < 18)
             throw new AgeLessException("Возраст меньше 18.");
         if (employee.PassportId <= 0)
-            throw new ClientNotPassportDataException("У сотрудника нет пасспортных данных.");
+            throw new NotPassportDataException("У сотрудника нет пасспортных данных.");
         _employees.Add(employee);
     }
 }
