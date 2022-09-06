@@ -3,7 +3,7 @@ using Services.ExceptionCraft;
 
 namespace ServiceTests;
 
-public class WorkWithEmployeeTests
+public class EmployeeServiceTests
 {
     [Test]
     public void AddEmployee_Employee_AgeLessException()

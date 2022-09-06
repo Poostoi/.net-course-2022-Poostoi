@@ -3,7 +3,7 @@ using Services.ExceptionCraft;
 
 namespace ServiceTests;
 
-public class WorkWithClientTests
+public class ClientServiceTests
 {
     [Test]
     public void AddClient_Client_IsKeyExistInDictionaryException()
