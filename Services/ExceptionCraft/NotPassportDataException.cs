@@ -1,6 +1,6 @@
-namespace Services.Exception;
+namespace Services.ExceptionCraft;
 
-public class NotPassportDataException: System.Exception
+public class NotPassportDataException: Exception
 
 {
     public NotPassportDataException(string message) : base(message)

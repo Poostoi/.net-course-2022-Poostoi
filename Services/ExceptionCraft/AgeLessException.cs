@@ -1,6 +1,6 @@
-namespace Services.Exception;
+namespace Services.ExceptionCraft;
 
-public class AgeLessException: System.Exception 
+public class AgeLessException: Exception 
 {
     public AgeLessException(string message) : base(message)
     {

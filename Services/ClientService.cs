@@ -1,6 +1,6 @@
 using System.ComponentModel.Design;
 using Models;
-using Services.Exception;
+using Services.ExceptionCraft;
 
 namespace Services;
 
@@ -11,7 +11,7 @@ public class ClientService
     public void AddAccount(Client client, Account account)
     {
         if (_clients.ContainsKey(client))
-            throw new ArgumentException("Такой клиент уже существует");
+            throw new IsKeyExistInDictionaryException("Такой клиент уже существует");
         if (DateTime.Now.Year - client.DateBirth.Year < 18)
             throw new AgeLessException("Возраст меньше 18.");
         if (client.PassportId == 0)
