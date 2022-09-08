@@ -10,7 +10,7 @@ public class ClientServiceTests
     {
         //arrange
         var dataGenerator = new TestDataGenerator();
-        var clientService = new ClientService();
+        var clientService = new ClientService(new ClientStorage());
         var client = dataGenerator.GeneratingClient();
         var account = dataGenerator.GeneratingAccount();
         client.DateBirth = new DateTime(1970, 12, 27);
@@ -25,7 +25,7 @@ public class ClientServiceTests
     {
         //arrange
         var dataGenerator = new TestDataGenerator();
-        var clientService = new ClientService();
+        var clientService = new ClientService(new ClientStorage());
         var client = dataGenerator.GeneratingClient();
         var account = dataGenerator.GeneratingAccount();
         client.DateBirth = DateTime.Now;
@@ -38,7 +38,7 @@ public class ClientServiceTests
     {
         //arrange
         var dataGenerator = new TestDataGenerator();
-        var clientService = new ClientService();
+        var clientService = new ClientService(new ClientStorage());
         var client = dataGenerator.GeneratingClient();
         var account = dataGenerator.GeneratingAccount();
         client.DateBirth = new DateTime(1970, 12, 27);
