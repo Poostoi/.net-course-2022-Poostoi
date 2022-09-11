@@ -38,25 +38,60 @@ public class ClientServiceTests
         //arrange
         var filter = new ClientFilter()
         {
-            Name = "Михаил",
+            Surname = "Николаев",
+            DateStart = new DateTime(1999, 11, 1),
+            DateEnd = DateTime.Now
         };
         var clientStorage = new ClientStorage();
         var client = new TestDataGenerator().GeneratingClient();
         client.Name = "Михаил";
+        client.Surname = "Николаев";
+        client.DateBirth = new DateTime(2000, 11, 2);
+
+        //act
         for (var i = 0; i < 50; i++)
             clientStorage.Add(new TestDataGenerator().GeneratingClient());
+
         clientStorage.Add(client);
         var clientService = new ClientService(clientStorage);
-        //act
         var dictionary = clientService.GetClients(filter);
-        var youngestClient = clientStorage._clients.Max(c => c.Key.DateBirth);
-        var oldestClient = clientStorage._clients.Min(c => c.Key.DateBirth);
-        var averageAge = clientStorage._clients.Average(c =>DateTime.Now.Year - c.Key.DateBirth.Year);
+
         //assert
-        Assert.True(dictionary.Count >=1);
+        var averageAge = clientStorage._clients.Average(c => DateTime.Now.Year - c.Key.DateBirth.Year);
+        Assert.True(dictionary.Count == 1);
     }
 
-    
+    [Test]
+    public void GetClients_OldestClient_EqualTrue()
+    {
+        //arrange
+        var clientStorage = new ClientStorage();
+        var oldestClient = new TestDataGenerator().GeneratingClient();
+        oldestClient.DateBirth = new DateTime(1899, 11, 2);
 
-   
+        //act
+        for (var i = 0; i < 50; i++)
+            clientStorage.Add(new TestDataGenerator().GeneratingClient());
+        clientStorage.Add(oldestClient);
+
+        //assert
+        Assert.That(clientStorage._clients.Min(c => c.Key.DateBirth), Is.EqualTo(oldestClient.DateBirth));
+    }
+
+    [Test]
+    public void GetClients_YoungestClient_EqualTrue()
+    {
+        //arrange
+        var clientStorage = new ClientStorage();
+        var youngestClient = new TestDataGenerator().GeneratingClient();
+        youngestClient.DateBirth = new DateTime(2001, 11, 2);
+
+        //act
+        for (var i = 0; i < 50; i++)
+            clientStorage.Add(new TestDataGenerator().GeneratingClient());
+        clientStorage.Add(youngestClient);
+
+        //assert
+        Assert.That(clientStorage._clients.Max(c => c.Key.DateBirth), Is.EqualTo(youngestClient.DateBirth));
+    }
 }

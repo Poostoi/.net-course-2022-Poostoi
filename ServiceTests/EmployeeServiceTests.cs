@@ -39,6 +39,7 @@ public class EmployeeServiceTests
         var filter = new EmployeeFilter()
         {
             Name = "Михаил",
+            DateEnd = DateTime.Now
         };
         var employeeStorage = new EmployeeStorage();
         var employee = new TestDataGenerator().GeneratingEmployee();

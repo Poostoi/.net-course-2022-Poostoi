@@ -23,30 +23,32 @@ public class ClientService
 
     public Dictionary<Client, Account> GetClients(ClientFilter clientFilter)
     {
-        var dictionary = new Dictionary<Client, Account>();
-        IEnumerable<KeyValuePair<Client, Account>> request = null;
+
+        var request = _clientStorage._clients.Select(c => c);
+        
         if (clientFilter.Name != null && clientFilter.Name != "")
-            request = _clientStorage._clients.Where(c => 
+            request = request.Where(c => 
                 c.Key.Name == clientFilter.Name);
         if (clientFilter.Surname != null && clientFilter.Surname != "")
-            request = _clientStorage._clients.Where(c => 
+            request = request.Where(c => 
                 c.Key.Surname == clientFilter.Surname);
         if (clientFilter.NumberPhone != 0)
-            request = _clientStorage._clients.Where(c => 
+            request = request.Where(c => 
                 c.Key.NumberPhone == clientFilter.NumberPhone);
         if (clientFilter.PassportId != 0)
-            request = _clientStorage._clients.Where(c => 
+            request = request.Where(c => 
                 c.Key.PassportId == clientFilter.PassportId);
+        
         if (clientFilter.DateStart != new DateTime())
-            request = _clientStorage._clients.Where(c => 
+            request = request.Where(c => 
                 c.Key.DateBirth >= clientFilter.DateStart);
         if (clientFilter.DateEnd != new DateTime())
-            request = _clientStorage._clients.Where(c => 
+            request = request.Where(c => 
                 c.Key.DateBirth <= clientFilter.DateEnd);
-        dictionary = request.ToDictionary(x=>x.Key,
-            y=>y.Value);;
+        request = request.ToDictionary(x=>x.Key,
+            y=>y.Value);
 
-        return dictionary;
+        return (Dictionary<Client, Account>)request;
     }
 
 }
