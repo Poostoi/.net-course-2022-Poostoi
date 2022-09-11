@@ -70,7 +70,11 @@ public class TestDataGenerator
         {
             Surname = new Faker("ru").Name.FirstName(Name.Gender.Male),
             Name = new Faker("ru").Name.LastName(Name.Gender.Male),
-            DateBirth = new Faker("ru").Date.Past(new Random().Next(0, 55)),
+            DateBirth = new DateTime(
+                new Random().Next(1900, 2000),
+                new Random().Next(1, 12),
+                new Random().Next(1, 28)
+                ),
             NumberPhone = new Random().Next(111111, 999999),
             PassportId = new Random().Next(111111, 999999)
         };
@@ -89,7 +93,11 @@ public class TestDataGenerator
     {
         Surname = new Faker("ru").Name.FirstName(Name.Gender.Male),
         Name = new Faker("ru").Name.LastName(Name.Gender.Male),
-        DateBirth = new Faker("ru").Date.Past(new Random().Next(0, 55)),
+        DateBirth = new DateTime(
+            new Random().Next(1900, 2000),
+            new Random().Next(1, 12),
+            new Random().Next(1, 28)
+        ),
         PassportId = new Random().Next(111111, 999999),
         Contract = "Заключен",
         Salary = new Random().Next(2000, 15000)
