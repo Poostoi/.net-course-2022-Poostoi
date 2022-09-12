@@ -50,9 +50,9 @@ public class EmployeeServiceTests
         var employeeService = new EmployeeService(employeeStorage);
         //act
         var dictionary = employeeService.GetEmployees(filter);
-        var youngestClient = employeeStorage._employees.Max(c => c.DateBirth);
-        var oldestClient = employeeStorage._employees.Min(c => c.DateBirth);
-        var averageAge = employeeStorage._employees.Average(c => DateTime.Now.Year - c.DateBirth.Year);
+        var youngestClient = employeeStorage.Date.Max(c => c.DateBirth);
+        var oldestClient = employeeStorage.Date.Min(c => c.DateBirth);
+        var averageAge = employeeStorage.Date.Average(c => DateTime.Now.Year - c.DateBirth.Year);
         //assert
         Assert.True(dictionary.Count >= 1);
     }

@@ -57,7 +57,7 @@ public class ClientServiceTests
         var dictionary = clientService.GetClients(filter);
 
         //assert
-        var averageAge = clientStorage._clients.Average(c => DateTime.Now.Year - c.Key.DateBirth.Year);
+        var averageAge = clientStorage.Data.Average(c => DateTime.Now.Year - c.Key.DateBirth.Year);
         Assert.True(dictionary.Count == 1);
     }
 
@@ -75,7 +75,7 @@ public class ClientServiceTests
         clientStorage.Add(oldestClient);
 
         //assert
-        Assert.That(clientStorage._clients.Min(c => c.Key.DateBirth), Is.EqualTo(oldestClient.DateBirth));
+        Assert.That(clientStorage.Data.Min(c => c.Key.DateBirth), Is.EqualTo(oldestClient.DateBirth));
     }
 
     [Test]
@@ -92,6 +92,6 @@ public class ClientServiceTests
         clientStorage.Add(youngestClient);
 
         //assert
-        Assert.That(clientStorage._clients.Max(c => c.Key.DateBirth), Is.EqualTo(youngestClient.DateBirth));
+        Assert.That(clientStorage.Data.Max(c => c.Key.DateBirth), Is.EqualTo(youngestClient.DateBirth));
     }
 }

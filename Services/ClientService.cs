@@ -2,13 +2,14 @@ using System.ComponentModel.Design;
 using Models;
 using Services.ExceptionCraft;
 using Services.Filters;
+using Services.Storage;
 
 namespace Services;
 
 public class ClientService
 {
-    private ClientStorage _clientStorage;
-    public ClientService(ClientStorage clientStorage)
+    private IClientStorage _clientStorage;
+    public ClientService(IClientStorage clientStorage)
     {
         _clientStorage = clientStorage;
     }
@@ -24,7 +25,7 @@ public class ClientService
     public Dictionary<Client, Account> GetClients(ClientFilter clientFilter)
     {
 
-        var request = _clientStorage._clients.Select(c => c);
+        var request = _clientStorage.Data.Select(c => c);
         
         if (clientFilter.Name != null && clientFilter.Name != "")
             request = request.Where(c => 
