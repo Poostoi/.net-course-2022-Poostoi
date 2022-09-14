@@ -2,7 +2,7 @@
 
 public abstract class Person
 {
-    
+    public int Bonus { get; set; }
 
     public string Surname { get; set; }
     public string Name { get; set; }

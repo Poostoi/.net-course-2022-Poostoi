@@ -1,7 +1,7 @@
 ﻿using Models;
 using Services;
 
-var services = new BankService();
+var services = new BankService<Client>();
 var employee = new Employee(){Surname = "Соколов",
     Name = "Сергей",
     PassportId = 12313123,
@@ -20,7 +20,7 @@ employee.Salary = services.CalculationBankOwnerSalary(3000,
 Console.WriteLine($"Зарплата одного из владельцев {employee.Surname}" +
                   $" {employee.Name}:" +
                   $" {employee.Salary}");
-var employeeWhoWasClient = new Services.BankService().TransformationClientInEmployee(client);
+var employeeWhoWasClient = new Services.BankService<Client>().TransformationClientInEmployee(client);
 var result = employeeWhoWasClient.Name == client.Name &&
              employeeWhoWasClient.Surname == client.Surname &&
              employeeWhoWasClient.DateBirth == client.DateBirth &&

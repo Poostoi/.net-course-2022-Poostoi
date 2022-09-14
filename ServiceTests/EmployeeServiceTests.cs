@@ -1,6 +1,7 @@
 using Services;
 using Services.ExceptionCraft;
 using Services.Filters;
+using Services.Storage;
 
 namespace ServiceTests;
 
@@ -50,9 +51,9 @@ public class EmployeeServiceTests
         var employeeService = new EmployeeService(employeeStorage);
         //act
         var dictionary = employeeService.GetEmployees(filter);
-        var youngestClient = employeeStorage.Date.Max(c => c.DateBirth);
-        var oldestClient = employeeStorage.Date.Min(c => c.DateBirth);
-        var averageAge = employeeStorage.Date.Average(c => DateTime.Now.Year - c.DateBirth.Year);
+        var youngestClient = employeeStorage.Data.Max(c => c.DateBirth);
+        var oldestClient = employeeStorage.Data.Min(c => c.DateBirth);
+        var averageAge = employeeStorage.Data.Average(c => DateTime.Now.Year - c.DateBirth.Year);
         //assert
         Assert.True(dictionary.Count >= 1);
     }
