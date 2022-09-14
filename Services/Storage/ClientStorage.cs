@@ -5,8 +5,16 @@ namespace Services.Storage;
 public class ClientStorage : IClientStorage
 {
     public Dictionary<Client, Account> Data { get; }
-    public ClientStorage() => Data = new Dictionary<Client, Account>();
-    public void AddAccount(Client client, Account account) => Data.Add(client, account);
+
+    public ClientStorage()
+    {
+        Data = new Dictionary<Client, Account>();
+    }
+
+    public void AddAccount(Client client, Account account)
+    {
+        Data.Add(client, account);
+    }
 
     public void UpdateAccount(Client client, Account account)
     {
@@ -22,7 +30,10 @@ public class ClientStorage : IClientStorage
         Data.Remove(client);
     }
 
-    public void Add(Client client) => Data.Add(client, new TestDataGenerator().GeneratingAccount());
+    public void Add(Client client)
+    {
+        Data.Add(client, new TestDataGenerator().GeneratingAccount());
+    }
 
     public void Update(Client client)
     {

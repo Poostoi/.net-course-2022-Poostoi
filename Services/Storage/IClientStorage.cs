@@ -2,7 +2,7 @@
 
 namespace Services.Storage;
 
-public interface IClientStorage:IStorage<Client>
+public interface IClientStorage : IStorage<Client>
 {
     public Dictionary<Client,Account> Data { get; }
 
