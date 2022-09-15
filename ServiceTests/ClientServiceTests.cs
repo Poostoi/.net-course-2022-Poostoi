@@ -1,6 +1,8 @@
+using Models;
 using Services;
 using Services.ExceptionCraft;
 using Services.Filters;
+using Services.Storage;
 
 namespace ServiceTests;
 
@@ -57,7 +59,7 @@ public class ClientServiceTests
         var dictionary = clientService.GetClients(filter);
 
         //assert
-        var averageAge = clientStorage._clients.Average(c => DateTime.Now.Year - c.Key.DateBirth.Year);
+        var averageAge = clientStorage.Data.Average(c => DateTime.Now.Year - c.Key.DateBirth.Year);
         Assert.True(dictionary.Count == 1);
     }
 
@@ -75,23 +77,6 @@ public class ClientServiceTests
         clientStorage.Add(oldestClient);
 
         //assert
-        Assert.That(clientStorage._clients.Min(c => c.Key.DateBirth), Is.EqualTo(oldestClient.DateBirth));
-    }
-
-    [Test]
-    public void GetClients_YoungestClient_EqualTrue()
-    {
-        //arrange
-        var clientStorage = new ClientStorage();
-        var youngestClient = new TestDataGenerator().GeneratingClient();
-        youngestClient.DateBirth = new DateTime(2001, 11, 2);
-
-        //act
-        for (var i = 0; i < 50; i++)
-            clientStorage.Add(new TestDataGenerator().GeneratingClient());
-        clientStorage.Add(youngestClient);
-
-        //assert
-        Assert.That(clientStorage._clients.Max(c => c.Key.DateBirth), Is.EqualTo(youngestClient.DateBirth));
+        Assert.That(clientStorage.Data.Min(c => c.Key.DateBirth), Is.EqualTo(oldestClient.DateBirth));
     }
 }

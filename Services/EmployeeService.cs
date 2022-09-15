@@ -1,6 +1,7 @@
 using Models;
 using Services.ExceptionCraft;
 using Services.Filters;
+using Services.Storage;
 
 namespace Services;
 
@@ -25,25 +26,25 @@ public class EmployeeService
         var list = new List<Employee>();
         IEnumerable<Employee> request = null;
         if (employeeFilter.Name != null && employeeFilter.Name != "")
-            request = _employeeStorage._employees.Where(c => 
+            request = _employeeStorage.Data.Where(c => 
                 c.Name == employeeFilter.Name);
         if (employeeFilter.Surname != null && employeeFilter.Surname != "")
-            request = _employeeStorage._employees.Where(c => 
+            request = _employeeStorage.Data.Where(c => 
                 c.Surname == employeeFilter.Surname);
         if (employeeFilter.Salary != 0)
-            request = _employeeStorage._employees.Where(c => 
+            request = _employeeStorage.Data.Where(c => 
                 c.Salary == employeeFilter.Salary);
         if (employeeFilter.Contract != null && employeeFilter.Contract != "")
-            request = _employeeStorage._employees.Where(c => 
+            request = _employeeStorage.Data.Where(c => 
                 c.Salary == employeeFilter.Salary);
         if (employeeFilter.PassportId != 0)
-            request = _employeeStorage._employees.Where(c => 
+            request = _employeeStorage.Data.Where(c => 
                 c.PassportId == employeeFilter.PassportId);
         if (employeeFilter.DateStart != new DateTime())
-            request = _employeeStorage._employees.Where(c => 
+            request = _employeeStorage.Data.Where(c => 
                 c.DateBirth >= employeeFilter.DateStart);
         if (employeeFilter.DateEnd != new DateTime())
-            request = _employeeStorage._employees.Where(c => 
+            request = _employeeStorage.Data.Where(c => 
                 c.DateBirth <= employeeFilter.DateEnd);
         list = request.ToList();;
 

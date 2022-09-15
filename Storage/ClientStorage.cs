@@ -1,8 +1,6 @@
-
 using Models;
-using Services.ExceptionCraft;
 
-namespace Services;
+namespace Services.Storage;
 
 public class ClientStorage
 {
