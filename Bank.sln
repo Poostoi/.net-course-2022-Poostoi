@@ -19,6 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeListAndDictionary",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceTests", "ServiceTests\ServiceTests.csproj", "{A2C80E40-9B4D-40F5-BE96-C77EF0AD2DAE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{ECA8FEB2-CB13-46BA-86DD-C8E52E8C8A89}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Downloads\run_sql_query.sql = ..\..\Downloads\run_sql_query.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
