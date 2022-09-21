@@ -2,6 +2,13 @@ namespace Models;
 
 public class Account
 {
+    public Account()
+    {
+        Id = new Guid();
+    }
+
+    public Client Client { get; set; }
+    public Guid Id { get; private init; }
     public Currency Currency { get; set; }
     public int Amount { get; set; }
 

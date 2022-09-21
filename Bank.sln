@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{ECA8FEB2-C
 		..\..\Downloads\run_sql_query.sql = ..\..\Downloads\run_sql_query.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migration", "Migration\Migration.csproj", "{AE8D3FF1-A816-4C63-B841-7B057CF37BB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{A2C80E40-9B4D-40F5-BE96-C77EF0AD2DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2C80E40-9B4D-40F5-BE96-C77EF0AD2DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2C80E40-9B4D-40F5-BE96-C77EF0AD2DAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE8D3FF1-A816-4C63-B841-7B057CF37BB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE8D3FF1-A816-4C63-B841-7B057CF37BB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE8D3FF1-A816-4C63-B841-7B057CF37BB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE8D3FF1-A816-4C63-B841-7B057CF37BB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,5 +69,6 @@ Global
 		{746D4238-F4BC-4120-89BA-341FFAC6EC33} = {2DAB60D7-5A6B-4CEC-A89D-2D0EA563B334}
 		{ABCCDC2E-052A-4ACA-A679-B2AD877A42ED} = {BCDD88E8-992E-4798-A26E-12FB1F55E5A5}
 		{A2C80E40-9B4D-40F5-BE96-C77EF0AD2DAE} = {2DAB60D7-5A6B-4CEC-A89D-2D0EA563B334}
+		{AE8D3FF1-A816-4C63-B841-7B057CF37BB6} = {BCDD88E8-992E-4798-A26E-12FB1F55E5A5}
 	EndGlobalSection
 EndGlobal

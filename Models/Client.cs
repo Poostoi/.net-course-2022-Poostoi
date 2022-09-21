@@ -2,6 +2,12 @@
 
 public class Client:Person
 {
+    public Client()
+    {
+        Clients = new List<Client>();
+    }
+
+    public ICollection<Client> Clients { get; set; }
     public int NumberPhone { get; set; }
     public override bool Equals(object? obj)
     {
