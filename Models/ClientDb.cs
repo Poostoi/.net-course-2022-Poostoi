@@ -4,10 +4,10 @@ public class Client:Person
 {
     public Client()
     {
-        Clients = new List<Client>();
+        Accounts = new List<AccountDb>();
     }
 
-    public ICollection<Client> Clients { get; set; }
+    public ICollection<AccountDb> Accounts { get; set; }
     public int NumberPhone { get; set; }
     public override bool Equals(object? obj)
     {
