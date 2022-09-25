@@ -10,7 +10,7 @@ public class BankServiceTest
     public void AddBonus_Client_BonusOne()
     {
         //arrange
-        var bankService = new BankService<Client>();
+        var bankService = new BankService<ClientDb>();
         var testDate = new TestDataGenerator();
         var client = testDate.GeneratingClient();
         //assert
@@ -22,27 +22,27 @@ public class BankServiceTest
     public void AddToBlackList_Client_BlackListContainsClientEmployee()
     {
         //arrange
-        var bankService = new BankService<Client>();
+        var bankService = new BankService<ClientDb>();
         var testDate = new TestDataGenerator();
         var client = testDate.GeneratingClient();
         var employee = testDate.GeneratingEmployee();
         //assert
-        bankService.AddToBlackList<Client>(client);
-        bankService.AddToBlackList<Employee>(employee);
+        bankService.AddToBlackList<ClientDb>(client);
+        bankService.AddToBlackList<EmployeeDb>(employee);
         //act
-        Assert.True(bankService.BlackList[0] is Client);
-        Assert.True(bankService.BlackList[1] is Employee);
+        Assert.True(bankService.BlackList[0] is ClientDb);
+        Assert.True(bankService.BlackList[1] is EmployeeDb);
         
     }
     [Test]
     public void IsPersonInBlackList_Client_BlackListContainsClient()
     {
         //arrange
-        var bankService = new BankService<Client>();
+        var bankService = new BankService<ClientDb>();
         var testDate = new TestDataGenerator();
         var client = testDate.GeneratingClient();
         //assert
-        bankService.AddToBlackList<Client>(client);
+        bankService.AddToBlackList<ClientDb>(client);
         //act
         Assert.True(bankService.IsPersonInBlackList(client));
     }

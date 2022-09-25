@@ -1,3 +1,4 @@
+using Migration;
 using Services;
 using Services.ExceptionCraft;
 using Services.Filters;
@@ -56,5 +57,49 @@ public class EmployeeServiceTests
         var averageAge = employeeStorage.Data.Average(c => DateTime.Now.Year - c.DateBirth.Year);
         //assert
         Assert.True(dictionary.Count >= 1);
+    }
+    [Test]
+    public void AddEmployeeDb_Employee_ContainEmployee()
+    {
+        //arrange
+        var employeeDb = new TestDataGenerator().GeneratingEmployee();
+        var clientService = new EmployeeService(new BankContext());
+
+        //act
+        clientService.AddEmployeeDb(employeeDb);
+        //assert
+        Assert.NotNull(clientService.GetEmployeeDb(employeeDb.Id));
+    }
+    
+    
+    [Test]
+    public void ChangeEmployeeDb_Employee_NotEqual()
+    {
+        //arrange
+        var employeeDbOld = new TestDataGenerator().GeneratingEmployee();
+        var employeeDbNew = new TestDataGenerator().GeneratingEmployee();
+        var employeeService = new EmployeeService(new BankContext());
+        
+
+        //act
+        employeeService.AddEmployeeDb(employeeDbOld);
+        var oldEmployeeDbInDB = employeeService.GetEmployeeDb(employeeDbOld.Id);
+        var oldPassportId = oldEmployeeDbInDB.PassportId;
+        employeeService.ChangeEmployeeDb(employeeDbOld.Id,employeeDbNew);
+        //assert
+        Assert.False(employeeService.GetEmployeeDb(employeeDbOld.Id).PassportId.Equals(oldPassportId));
+    }
+    [Test]
+    public void DeleteEmployeeDb_Employee_NotEmployee()
+    {
+        //arrange
+        var employeeDb = new TestDataGenerator().GeneratingEmployee();
+        var employeeService = new EmployeeService(new BankContext());
+
+        //act
+        employeeService.AddEmployeeDb(employeeDb);
+        employeeService.RemoveEmployeeDb(employeeDb.Id);
+        //assert
+        Assert.Null(employeeService.GetEmployeeDb(employeeDb.Id));
     }
 }

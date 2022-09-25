@@ -16,13 +16,13 @@ public class BankService<T> where T : Person
         int  numberBankOwners) =>
         (bankProfit-expenses)/numberBankOwners;
 
-    public Employee TransformationClientInEmployee(Client client) => 
-        new Employee()
+    public EmployeeDb TransformationClientInEmployee(ClientDb clientDb) => 
+        new EmployeeDb()
         {
-            Surname = client.Surname,
-            Name = client.Name,
-            DateBirth = client.DateBirth,
-            PassportId = client.PassportId,
+            Surname = clientDb.Surname,
+            Name = clientDb.Name,
+            DateBirth = clientDb.DateBirth,
+            PassportId = clientDb.PassportId,
             Salary = 0
         };
 

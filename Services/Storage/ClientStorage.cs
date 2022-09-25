@@ -4,49 +4,49 @@ namespace Services.Storage;
 
 public class ClientStorage : IClientStorage
 {
-    public Dictionary<Client, Account> Data { get; }
+    public Dictionary<ClientDb, AccountDb> Data { get; }
 
     public ClientStorage()
     {
-        Data = new Dictionary<Client, Account>();
+        Data = new Dictionary<ClientDb, AccountDb>();
     }
 
-    public void AddAccount(Client client, Account account)
+    public void AddAccount(ClientDb clientDb, AccountDb accountDb)
     {
-        Data.Add(client, account);
+        Data.Add(clientDb, accountDb);
     }
 
-    public void UpdateAccount(Client client, Account account)
+    public void UpdateAccount(ClientDb clientDb, AccountDb accountDb)
     {
-        if (!Data.ContainsKey(client)) return;
-        var existAccount = Data[client];
-        existAccount.Amount = account.Amount;
-        existAccount.Currency = account.Currency;
+        if (!Data.ContainsKey(clientDb)) return;
+        var existAccount = Data[clientDb];
+        existAccount.Amount = accountDb.Amount;
+        existAccount.CurrenciesDb = accountDb.CurrenciesDb;
     }
 
-    public void DeleteAccount(Client client, Account account)
+    public void DeleteAccount(ClientDb clientDb, AccountDb accountDb)
     {
-        if (!Data.ContainsKey(client)) return;
-        Data.Remove(client);
+        if (!Data.ContainsKey(clientDb)) return;
+        Data.Remove(clientDb);
     }
 
-    public void Add(Client client)
+    public void Add(ClientDb clientDb)
     {
-        Data.Add(client, new TestDataGenerator().GeneratingAccount());
+        Data.Add(clientDb, new TestDataGenerator().GeneratingAccount());
     }
 
-    public void Update(Client client)
+    public void Update(ClientDb clientDb)
     {
-        var existClient = Data.First(c => c.Key.PassportId == client.PassportId).Key;
-        existClient.NumberPhone = client.NumberPhone;
-        existClient.Name = client.Name;
-        existClient.Surname = client.Surname;
-        existClient.DateBirth = client.DateBirth;
+        var existClient = Data.First(c => c.Key.PassportId == clientDb.PassportId).Key;
+        existClient.NumberPhone = clientDb.NumberPhone;
+        existClient.Name = clientDb.Name;
+        existClient.Surname = clientDb.Surname;
+        existClient.DateBirth = clientDb.DateBirth;
     }
 
-    public void Delete(Client client)
+    public void Delete(ClientDb clientDb)
     {
-        if (!Data.ContainsKey(client)) return;
-        Data.Remove(client);
+        if (!Data.ContainsKey(clientDb)) return;
+        Data.Remove(clientDb);
     }
 }

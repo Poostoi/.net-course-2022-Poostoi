@@ -2,27 +2,27 @@
 
 namespace Services.Storage;
 
-public class EmployeeStorage: IStorage<Employee>
+public class EmployeeStorage: IStorage<EmployeeDb>
 {
-    public  List<Employee> Data { get; }
+    public  List<EmployeeDb> Data { get; }
 
-    public EmployeeStorage() => Data = new List<Employee>();
-    public void Add(Employee employee) => Data.Add(employee);
+    public EmployeeStorage() => Data = new List<EmployeeDb>();
+    public void Add(EmployeeDb employeeDb) => Data.Add(employeeDb);
 
-    public void Update(Employee employee)
+    public void Update(EmployeeDb employeeDb)
     {
-        var employeeOld = Data.Find(e => e.PassportId == employee.PassportId);
+        var employeeOld = Data.Find(e => e.PassportId == employeeDb.PassportId);
         if (employeeOld == null) return;
-        employeeOld.Contract = employee.Contract;
-        employeeOld.Name = employee.Name;
-        employeeOld.Surname = employee.Surname;
-        employeeOld.DateBirth = employee.DateBirth;
-        employeeOld.Salary = employee.Salary;
+        employeeOld.Contract = employeeDb.Contract;
+        employeeOld.Name = employeeDb.Name;
+        employeeOld.Surname = employeeDb.Surname;
+        employeeOld.DateBirth = employeeDb.DateBirth;
+        employeeOld.Salary = employeeDb.Salary;
     }
 
-    public void Delete(Employee employee)
+    public void Delete(EmployeeDb employeeDb)
     {
-        if (!Data.Contains(employee)) return;
-        Data.Remove(employee);
+        if (!Data.Contains(employeeDb)) return;
+        Data.Remove(employeeDb);
     }
 }

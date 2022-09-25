@@ -22,23 +22,7 @@ public class ClientStorageTest
         //assert
         Assert.True(currentClient.Equals(clientUpdate));
     }
-    [Test]
-    public void UpdateAccount_Account_ChangeAccount()
-    {
-        //arrange
-        var clientStorage = new ClientStorage();
-        var testData = new TestDataGenerator();
-        var client = testData.GeneratingClient();
-        var account = testData.GeneratingAccount();
-        var updateAccount = testData.GeneratingAccount();
-        //act
-        clientStorage.AddAccount(client,account);
-        
-        clientStorage.UpdateAccount(client, updateAccount);
-        
-        //assert
-        Assert.True(clientStorage.Data[client].Equals(updateAccount));
-    }
+    
     
     [Test]
     public void Delete_Client_DictionaryCountZero()

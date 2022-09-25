@@ -1,24 +1,26 @@
 namespace Models;
 
-public class Account
+public class AccountDb
 {
-    public Account()
+    public AccountDb()
     {
         Id = new Guid();
+        CurrenciesDb = new List<CurrencyDb>();
     }
 
-    public Client Client { get; set; }
-    public Guid Id { get; private init; }
-    public Currency Currency { get; set; }
+    public ClientDb ClientDb { get; set; }
+    public Guid Id { get; private init;  }
+    public List<CurrencyDb> CurrenciesDb { get; set; }
     public int Amount { get; set; }
 
     public override bool Equals(object? obj)
     {
-        if (obj is not Account)
+        if (obj is not AccountDb)
             return false;
-        var account = (Account)obj;
-        return Currency.Code == account.Currency.Code &&
-               Currency.Name == account.Currency.Name &&
+        var account = (AccountDb)obj;
+        
+        return Id == account.Id &&
+               ClientDb.Equals(account.ClientDb)&&
                Amount == account.Amount;
     }
 }

@@ -1,21 +1,22 @@
 ﻿namespace Models;
 
-public class Client:Person
+public class ClientDb:Person
 {
-    public Client()
+    public ClientDb()
     {
         Accounts = new List<AccountDb>();
     }
 
-    public ICollection<AccountDb> Accounts { get; set; }
+    public List<AccountDb> Accounts { get; set; }
     public int NumberPhone { get; set; }
     public override bool Equals(object? obj)
     {
-        if (obj is not Client)
+        if (obj is not ClientDb)
             return false;
-        var client = (Client)obj;
+        var client = (ClientDb)obj;
         
-        return client.NumberPhone == NumberPhone &&
+        return client.Id == Id &&
+               client.NumberPhone == NumberPhone &&
                client.Surname == Surname &&
                client.Name == Name &&
                client.DateBirth == DateBirth &&
