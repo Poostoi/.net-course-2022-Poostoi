@@ -42,9 +42,9 @@ public class ClientServiceTests
         var clientService = new ClientService(new BankContext());
 
         //act
-        clientService.AddClientDb(clientDb);
+        clientService.AddClient(clientDb);
         //assert
-        Assert.NotNull(clientService.GetClientDb(clientDb.Id));
+        Assert.NotNull(clientService.GetClient(clientDb.Id));
     }
     [Test]
     public void AddAccountDb_Client_ContainAccountTwo()
@@ -54,11 +54,11 @@ public class ClientServiceTests
         var clientService = new ClientService(new BankContext());
 
         //act
-        clientService.AddClientDb(clientDb);
+        clientService.AddClient(clientDb);
         clientService.AddAccountDb(clientDb.Id);
-        clientService.GetClientDb(clientDb.Id);
+        clientService.GetClient(clientDb.Id);
         //assert
-        Assert.True(clientService.GetClientDb(clientDb.Id).Accounts.Count==2);
+        Assert.True(clientService.GetClient(clientDb.Id).Accounts.Count==2);
     }
     [Test]
     public void ChangeClientDb_Client_NotEqual()
@@ -70,12 +70,12 @@ public class ClientServiceTests
         
 
         //act
-        clientService.AddClientDb(clientDbOld);
-        var oldClientInDB = clientService.GetClientDb(clientDbOld.Id);
+        clientService.AddClient(clientDbOld);
+        var oldClientInDB = clientService.GetClient(clientDbOld.Id);
         var oldPassportId = oldClientInDB.PassportId;
         clientService.ChangeClientDb(clientDbOld.Id,clientDbNew);
         //assert
-        Assert.False(clientService.GetClientDb(clientDbOld.Id).PassportId.Equals(oldPassportId));
+        Assert.False(clientService.GetClient(clientDbOld.Id).PassportId.Equals(oldPassportId));
     }
     [Test]
     public void DeleteClientDb_Client_NotClient()
@@ -85,9 +85,9 @@ public class ClientServiceTests
         var clientService = new ClientService(new BankContext());
 
         //act
-        clientService.AddClientDb(clientDb);
+        clientService.AddClient(clientDb);
         clientService.RemoveClientDb(clientDb.Id);
         //assert
-        Assert.Null(clientService.GetClientDb(clientDb.Id));
+        Assert.Null(clientService.GetClient(clientDb.Id));
     }
 }

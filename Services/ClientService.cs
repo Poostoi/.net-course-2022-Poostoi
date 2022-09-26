@@ -1,5 +1,6 @@
 using Migration;
 using Models;
+using ModelsDb;
 using Services.ExceptionCraft;
 using Services.Filters;
 using Services.Storage;
@@ -19,16 +20,16 @@ public class ClientService
         _bankContext = bankContext;
     }
 
-    public void AddAccount(ClientDb clientDb)
+    public void AddAccount(Client client)
     {
-        if (DateTime.Now.Year - clientDb.DateBirth.Year < 18)
+        if (DateTime.Now.Year - client.DateBirth.Year < 18)
             throw new AgeLessException("Возраст меньше 18.");
-        if (clientDb.PassportId == 0)
+        if (client.PassportId == 0)
             throw new NotPassportDataException("У клиента нет пасспортных данных.");
-        _clientStorage.Add(clientDb);
+        _clientStorage.Add(client);
     }
 
-    public Dictionary<ClientDb, AccountDb> GetClients(ClientFilter clientFilter)
+    public Dictionary<Client, Account> GetClients(ClientFilter clientFilter)
     {
         var request = _clientStorage.Data.Select(c => c);
 
@@ -54,51 +55,51 @@ public class ClientService
         request = request.ToDictionary(x => x.Key,
             y => y.Value);
 
-        return (Dictionary<ClientDb, AccountDb>)request;
+        return (Dictionary<Client, Account>)request;
     }
 
-    public ClientDb GetClientDb(Guid clientId)
+    public Client GetClient(Guid clientId)
     {
         return _bankContext.Clients.FirstOrDefault(c => c.Id == clientId);
     }
 
-    public void AddClientDb(ClientDb clientDb)
+    public void AddClient(Client client)
     {
-        _bankContext.Clients.Add(clientDb);
+        _bankContext.Clients.Add(client);
         _bankContext.SaveChanges();
     }
 
     public void AddAccountDb(Guid clientId)
     {
-        GetClientDb(clientId).Accounts.Add( new TestDataGenerator().GeneratingAccount());
+        GetClient(clientId).Accounts.Add( new TestDataGenerator().GeneratingAccount());
     }
 
-    public void ChangeClientDb(Guid clientId, ClientDb clientDb)
+    public void ChangeClientDb(Guid clientId, Client client)
     {
-        var clientInDatabase = GetClientDb(clientId);
-        clientInDatabase.Accounts = clientDb.Accounts;
-        clientInDatabase.NumberPhone = clientDb.NumberPhone;
-        clientInDatabase.Name = clientDb.Name;
-        clientInDatabase.Surname = clientDb.Surname;
-        clientInDatabase.DateBirth = clientDb.DateBirth;
-        clientInDatabase.Bonus = clientDb.Bonus;
-        clientInDatabase.PassportId = clientDb.PassportId;
+        var clientInDatabase = GetClient(clientId);
+        clientInDatabase.Accounts = client.Accounts;
+        clientInDatabase.NumberPhone = client.NumberPhone;
+        clientInDatabase.Name = client.Name;
+        clientInDatabase.Surname = client.Surname;
+        clientInDatabase.DateBirth = client.DateBirth;
+        clientInDatabase.Bonus = client.Bonus;
+        clientInDatabase.PassportId = client.PassportId;
         _bankContext.SaveChanges();
     }
 
     public void RemoveClientDb(Guid clientDbId)
     {
-        _bankContext.Clients.Remove(GetClientDb(clientDbId));
+        _bankContext.ClientsDb.Remove(GetClient(clientDbId));
         _bankContext.SaveChanges();
     }
-    public void RemoveAccountDb(ClientDb clientDb, AccountDb accountDb)
+    public void RemoveAccountDb(Client client, Account account)
     {
-        GetClientDb(clientDb.Id).Accounts.Remove(accountDb);
+        GetClient(client.Id).Accounts.Remove(account);
         _bankContext.SaveChanges();
     }
-    public List<ClientDb> GetClientsDb(ClientFilter clientFilter)
+    public List<Client> GetClientsDb(ClientFilter clientFilter)
     {
-        var request = _bankContext.Clients.Select(c => c);
+        var request = _bankContext.ClientsDb.Select(c => c);
 
         if (clientFilter.Name != null && clientFilter.Name != "")
             request = request.Where(c =>

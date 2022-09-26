@@ -1,6 +1,7 @@
 using Models;
 using Bogus;
 using Bogus.DataSets;
+using Currency = Models.Currency;
 
 namespace Services;
 
@@ -11,9 +12,9 @@ public class TestDataGenerator
         "usd","euro","dinar","lev","real","krone","dinar","ruble","hryvnia",
         "franc","yen","kuna","peso", "yane"
     };
-    public List<ClientDb> GenerateListClient(int count)
+    public List<Client> GenerateListClient(int count)
     {
-        var listClient = new List<ClientDb>();
+        var listClient = new List<Client>();
         for (int i = 0; i < count; i++)
         {
             listClient.Add(GeneratingClient());
@@ -22,9 +23,9 @@ public class TestDataGenerator
         return listClient;
     }
 
-    public Dictionary<int, ClientDb> GenerateDictionaryClient(int count)
+    public Dictionary<int, Client> GenerateDictionaryClient(int count)
     {
-        var dictionaryClient = new Dictionary<int, ClientDb>();
+        var dictionaryClient = new Dictionary<int, Client>();
         for (int i = 0; i < count; i++)
         {
             dictionaryClient.Add(i, GeneratingClient());
@@ -33,10 +34,10 @@ public class TestDataGenerator
         return dictionaryClient;
     }
 
-    public List<EmployeeDb> GenerateListEmployee(int count)
+    public List<Employee> GenerateListEmployee(int count)
     {
         var faker = new Faker("ru");
-        var listEmployee = new List<EmployeeDb>();
+        var listEmployee = new List<Employee>();
 
         for (int i = 1; i < count; i++)
         {
@@ -46,9 +47,9 @@ public class TestDataGenerator
         return listEmployee;
     }
 
-    public Dictionary<ClientDb, AccountDb> GenerateDictionaryKeyClientValueAccount(int count)
+    public Dictionary<Client, Account> GenerateDictionaryKeyClientValueAccount(int count)
     {
-        var dictionaryClient = new Dictionary<ClientDb, AccountDb>();
+        var dictionaryClient = new Dictionary<Client, Account>();
 
         for (int i = 1; i < count; i++)
             dictionaryClient.Add(GeneratingClient(), GeneratingAccount());
@@ -56,10 +57,10 @@ public class TestDataGenerator
         return dictionaryClient;
     }
 
-    public Dictionary<ClientDb, List<AccountDb>> GenerateDictionaryKeyClientValueListAccount(int count)
+    public Dictionary<Client, List<Account>> GenerateDictionaryKeyClientValueListAccount(int count)
     {
         var faker = new Faker("ru");
-        var dictionaryClient = new Dictionary<ClientDb, List<AccountDb>>();
+        var dictionaryClient = new Dictionary<Client, List<Account>>();
 
         for (int i = 1; i < count; i++)
         {
@@ -69,8 +70,8 @@ public class TestDataGenerator
         return dictionaryClient;
     }
 
-    public ClientDb GeneratingClient() =>
-        new ClientDb()
+    public Client GeneratingClient() =>
+        new Client()
         {
             Surname = new Faker("ru").Name.FirstName(Name.Gender.Male),
             Name = new Faker("ru").Name.LastName(Name.Gender.Male),
@@ -81,23 +82,23 @@ public class TestDataGenerator
                 ),
             NumberPhone = new Random().Next(111111, 999999),
             PassportId = new Random().Next(111111, 999999),
-            Accounts = new List<AccountDb>(){GeneratingAccount()}
+            Accounts = new List<Account>(){GeneratingAccount()}
         };
 
 
-    public AccountDb GeneratingAccount() => new AccountDb()
+    public Account GeneratingAccount() => new Account()
     {
-        CurrenciesDb = new List<CurrencyDb>(){GeneratingCurrency()},
+        CurrenciesDb = new List<Currency>(){GeneratingCurrency()},
             
         Amount = new Random().Next(0, 100000)
     };
-    public CurrencyDb GeneratingCurrency() => new CurrencyDb
+    public Currency GeneratingCurrency() => new Currency
         {
             Code = new Random().Next(0, 2000),
             Name = _currenciesName[new Random().Next(0, 14)]
         };
     
-    public EmployeeDb GeneratingEmployee() => new EmployeeDb()
+    public Employee GeneratingEmployee() => new Employee()
     {
         Surname = new Faker("ru").Name.FirstName(Name.Gender.Male),
         Name = new Faker("ru").Name.LastName(Name.Gender.Male),
@@ -111,10 +112,10 @@ public class TestDataGenerator
         Salary = new Random().Next(2000, 15000)
     };
 
-    public List<AccountDb> GeneratingRandomNumberAccount()
+    public List<Account> GeneratingRandomNumberAccount()
     {
         var numberAccount = new Random().Next(0, 4);
-        var list = new List<AccountDb>();
+        var list = new List<Account>();
         for (int i = 0; i < numberAccount; i++)
         {
             list.Add(GeneratingAccount());

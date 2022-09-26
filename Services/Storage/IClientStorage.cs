@@ -2,14 +2,14 @@
 
 namespace Services.Storage;
 
-public interface IClientStorage : IStorage<ClientDb>
+public interface IClientStorage : IStorage<Client>
 {
-    public Dictionary<ClientDb,AccountDb> Data { get; }
+    public Dictionary<Client,Account> Data { get; }
 
-    public void AddAccount(ClientDb clientDb, AccountDb accountDb);
+    public void AddAccount(Client client, Account account);
 
-    public void UpdateAccount(ClientDb clientDb, AccountDb accountDb);
+    public void UpdateAccount(Client client, Account account);
 
-    public void DeleteAccount(ClientDb clientDb, AccountDb accountDb);
+    public void DeleteAccount(Client client, Account account);
 
 }

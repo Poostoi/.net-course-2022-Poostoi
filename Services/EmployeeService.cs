@@ -21,16 +21,16 @@ public class EmployeeService
         _bankContext = bankContext;
     }
 
-    public void AddEmployee(EmployeeDb employeeDb)
+    public void AddEmployee(Employee employee)
     {
-        if (DateTime.Now.Year - employeeDb.DateBirth.Year < 18)
+        if (DateTime.Now.Year - employee.DateBirth.Year < 18)
             throw new AgeLessException("Возраст меньше 18.");
-        if (employeeDb.PassportId <= 0)
+        if (employee.PassportId <= 0)
             throw new NotPassportDataException("У сотрудника нет пасспортных данных.");
-        _employeeStorage.Add(employeeDb);
+        _employeeStorage.Add(employee);
     }
 
-    public List<EmployeeDb> GetEmployees(EmployeeFilter employeeFilter)
+    public List<Employee> GetEmployees(EmployeeFilter employeeFilter)
     {
         var request = _employeeStorage.Data.Select(c => c);
 
@@ -59,27 +59,27 @@ public class EmployeeService
         return request.ToList();
     }
 
-    public EmployeeDb GetEmployeeDb(Guid employeeId)
+    public Employee GetEmployeeDb(Guid employeeId)
     {
         return _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
     }
 
-    public void AddEmployeeDb(EmployeeDb employeeDb)
+    public void AddEmployeeDb(Employee employee)
     {
-        _bankContext.Employees.Add(employeeDb);
+        _bankContext.Employees.Add(employee);
         _bankContext.SaveChanges();
     }
 
-    public void ChangeEmployeeDb(Guid employeeId, EmployeeDb employeeDb)
+    public void ChangeEmployeeDb(Guid employeeId, Employee employee)
     {
         var employeeIdDatabase = GetEmployeeDb(employeeId);
-        employeeIdDatabase.Name = employeeDb.Name;
-        employeeIdDatabase.Surname = employeeDb.Surname;
-        employeeIdDatabase.DateBirth = employeeDb.DateBirth;
-        employeeIdDatabase.PassportId = employeeDb.PassportId;
-        employeeIdDatabase.Contract = employeeDb.Contract;
-        employeeIdDatabase.Salary = employeeDb.Salary;
-        employeeIdDatabase.Bonus = employeeDb.Bonus;
+        employeeIdDatabase.Name = employee.Name;
+        employeeIdDatabase.Surname = employee.Surname;
+        employeeIdDatabase.DateBirth = employee.DateBirth;
+        employeeIdDatabase.PassportId = employee.PassportId;
+        employeeIdDatabase.Contract = employee.Contract;
+        employeeIdDatabase.Salary = employee.Salary;
+        employeeIdDatabase.Bonus = employee.Bonus;
         _bankContext.SaveChanges();
     }
 
@@ -89,7 +89,7 @@ public class EmployeeService
         _bankContext.SaveChanges();
     }
 
-    public List<EmployeeDb> GetEmployeeDbs(EmployeeFilter employeeFilter)
+    public List<Employee> GetEmployeeDbs(EmployeeFilter employeeFilter)
     {
         var request = _bankContext.Employees.Select(c => c);
 

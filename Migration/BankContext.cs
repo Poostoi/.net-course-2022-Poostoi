@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models;
+using ModelsDb;
 
 namespace Migration;
 
 public class BankContext : DbContext
 {
-    public DbSet<ClientDb> Clients { get; set; }
-    public DbSet<EmployeeDb> Employees { get; set; }
-    public DbSet<AccountDb> Accounts { get; set; }
-    public DbSet<CurrencyDb> Currencies { get; set; }
+    public DbSet<Client> Clients { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Account> Accounts { get; set; }
+    public DbSet<Currency> Currencies { get; set; }
     public BankContext()
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

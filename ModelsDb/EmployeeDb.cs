@@ -1,4 +1,6 @@
-﻿namespace Models;
+using Models;
+
+namespace ModelsDb;
 
 public class EmployeeDb: Person
 {
