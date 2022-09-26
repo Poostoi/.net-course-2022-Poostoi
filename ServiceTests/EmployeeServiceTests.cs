@@ -62,13 +62,13 @@ public class EmployeeServiceTests
     public void AddEmployeeDb_Employee_ContainEmployee()
     {
         //arrange
-        var employeeDb = new TestDataGenerator().GeneratingEmployee();
-        var clientService = new EmployeeService(new BankContext());
+        var employee = new TestDataGenerator().GeneratingEmployee();
+        var employeeService = new EmployeeService(new BankContext());
 
         //act
-        clientService.AddEmployeeDb(employeeDb);
+        employeeService.AddEmployee(employee);
         //assert
-        Assert.NotNull(clientService.GetEmployeeDb(employeeDb.Id));
+        Assert.NotNull(employeeService.GetEmployee(employee.Id));
     }
     
     
@@ -76,30 +76,30 @@ public class EmployeeServiceTests
     public void ChangeEmployeeDb_Employee_NotEqual()
     {
         //arrange
-        var employeeDbOld = new TestDataGenerator().GeneratingEmployee();
-        var employeeDbNew = new TestDataGenerator().GeneratingEmployee();
+        var employeeOld = new TestDataGenerator().GeneratingEmployee();
+        var employeeNew = new TestDataGenerator().GeneratingEmployee();
         var employeeService = new EmployeeService(new BankContext());
         
 
         //act
-        employeeService.AddEmployeeDb(employeeDbOld);
-        var oldEmployeeDbInDB = employeeService.GetEmployeeDb(employeeDbOld.Id);
+        employeeService.AddEmployee(employeeOld);
+        var oldEmployeeDbInDB = employeeService.GetEmployee(employeeOld.Id);
         var oldPassportId = oldEmployeeDbInDB.PassportId;
-        employeeService.ChangeEmployeeDb(employeeDbOld.Id,employeeDbNew);
+        employeeService.ChangeEmployeeDb(employeeOld.Id,employeeNew);
         //assert
-        Assert.False(employeeService.GetEmployeeDb(employeeDbOld.Id).PassportId.Equals(oldPassportId));
+        Assert.False(employeeService.GetEmployee(employeeOld.Id).PassportId.Equals(oldPassportId));
     }
     [Test]
     public void DeleteEmployeeDb_Employee_NotEmployee()
     {
         //arrange
-        var employeeDb = new TestDataGenerator().GeneratingEmployee();
+        var employee = new TestDataGenerator().GeneratingEmployee();
         var employeeService = new EmployeeService(new BankContext());
 
         //act
-        employeeService.AddEmployeeDb(employeeDb);
-        employeeService.RemoveEmployeeDb(employeeDb.Id);
+        employeeService.AddEmployee(employee);
+        employeeService.RemoveEmployee(employee.Id);
         //assert
-        Assert.Null(employeeService.GetEmployeeDb(employeeDb.Id));
+        Assert.Null(employeeService.GetEmployee(employee.Id));
     }
 }

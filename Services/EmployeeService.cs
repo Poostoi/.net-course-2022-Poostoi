@@ -21,6 +21,7 @@ public class EmployeeService
     {
         _bankContext = bankContext;
     }
+
     public Employee GetEmployee(Guid employeeId)
     {
         var employeeDb = _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
@@ -44,7 +45,7 @@ public class EmployeeService
 
     public void ChangeEmployeeDb(Guid employeeId, Employee employee)
     {
-        var employeeIdDatabase =_bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
+        var employeeIdDatabase = _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
         employeeIdDatabase.Name = employee.Name;
         employeeIdDatabase.Surname = employee.Surname;
         employeeIdDatabase.DateBirth = employee.DateBirth;
@@ -56,9 +57,10 @@ public class EmployeeService
         _bankContext.SaveChanges();
     }
 
-    public void RemoveEmployeeDb(Guid employeeDbId)
+    public void RemoveEmployee(Guid employeeId)
     {
-        _bankContext.Employees.Remove(GetEmployeeDb(employeeDbId));
+        var employeeIdDatabase = _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
+        _bankContext.Employees.Remove(employeeIdDatabase);
         _bankContext.SaveChanges();
     }
 
@@ -87,8 +89,18 @@ public class EmployeeService
         if (employeeFilter.DateEnd != new DateTime())
             request = request.Where(c =>
                 c.DateBirth <= employeeFilter.DateEnd);
-
-        return request.ToList();
+        var employeeDbs = request.ToList();
+        return employeeDbs.Select(employeeDb => new Employee()
+            {
+                Bonus = employeeDb.Bonus,
+                DateBirth = employeeDb.DateBirth,
+                Name = employeeDb.Name,
+                PassportId = employeeDb.PassportId,
+                Surname = employeeDb.Surname,
+                Contract = employeeDb.Contract,
+                Salary = employeeDb.Salary
+            })
+            .ToList();
     }
 
     public List<Employee> GetEmployees(EmployeeFilter employeeFilter)
@@ -119,8 +131,4 @@ public class EmployeeService
 
         return request.ToList();
     }
-
-    
-
-
 }

@@ -1,3 +1,4 @@
+using Bogus;
 using Migration;
 using Models;
 using Services;
@@ -46,20 +47,19 @@ public class ClientServiceTests
         //assert
         Assert.NotNull(clientService.GetClient(clientDb.Id));
     }
-    [Test]
-    public void AddAccountDb_Client_ContainAccountTwo()
-    {
-        //arrange
-        var clientDb = new TestDataGenerator().GeneratingClient();
-        var clientService = new ClientService(new BankContext());
-
-        //act
-        clientService.AddClient(clientDb);
-        clientService.AddAccount(clientDb.Id);
-        clientService.GetClient(clientDb.Id);
-        //assert
-        Assert.True(clientService.GetClient(clientDb.Id).Accounts.Count==2);
-    }
+    // [Test]
+    // public void AddAccountDb_Client_ContainAccountTwo()
+    // {
+    //     //arrange
+    //     var clientDb = new TestDataGenerator().GeneratingClient();
+    //     var clientService = new ClientService(new BankContext());
+    //
+    //     //act
+    //     clientService.AddClient(clientDb);
+    //     clientService.AddAccount(clientDb.Id);
+    //     //assert
+    //     Assert.True(clientService..Accounts.Count==2);
+    // }
     [Test]
     public void ChangeClientDb_Client_NotEqual()
     {

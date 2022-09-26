@@ -109,11 +109,8 @@ public class ClientService
         if (clientFilter.DateEnd != new DateTime())
             request = request.Where(c =>
                 c.DateBirth <= clientFilter.DateEnd);
-        var clientDbs = request.ToList();
-        var clients = new List<Client>();
-        foreach (var clientDb in clientDbs)
-        {
-            clients.Add(new Client()
+
+        return request.Select(clientDb => new Client()
             {
                 Bonus = clientDb.Bonus,
                 DateBirth = clientDb.DateBirth,
@@ -121,10 +118,8 @@ public class ClientService
                 NumberPhone = clientDb.NumberPhone,
                 PassportId = clientDb.PassportId,
                 Surname = clientDb.Surname
-            });
-        }
-
-        return clients;
+            })
+            .ToList();
     }
 
 
