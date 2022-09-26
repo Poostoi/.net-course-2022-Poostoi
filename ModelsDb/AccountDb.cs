@@ -1,3 +1,5 @@
+using Models;
+
 namespace ModelsDb;
 
 public class AccountDb
@@ -6,6 +8,14 @@ public class AccountDb
     {
         Id = new Guid();
         CurrencyDbs = new List<CurrencyDb>();
+    }
+
+    public AccountDb(Account account)
+    {
+        ClientDb = new ClientDb();
+        Id = new Guid();
+        CurrencyDbs = new List<CurrencyDb>();
+        Amount = account.Amount;
     }
 
     public ClientDb ClientDb { get; set; }

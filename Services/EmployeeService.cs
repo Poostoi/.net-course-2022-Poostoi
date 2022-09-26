@@ -1,5 +1,6 @@
 using Migration;
 using Models;
+using ModelsDb;
 using Services.ExceptionCraft;
 using Services.Filters;
 using Services.Storage;
@@ -20,59 +21,30 @@ public class EmployeeService
     {
         _bankContext = bankContext;
     }
+    public Employee GetEmployee(Guid employeeId)
+    {
+        var employeeDb = _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
+        return new Employee()
+        {
+            Bonus = employeeDb.Bonus,
+            DateBirth = employeeDb.DateBirth,
+            Name = employeeDb.Name,
+            PassportId = employeeDb.PassportId,
+            Surname = employeeDb.Surname,
+            Contract = employeeDb.Contract,
+            Salary = employeeDb.Salary
+        };
+    }
 
     public void AddEmployee(Employee employee)
     {
-        if (DateTime.Now.Year - employee.DateBirth.Year < 18)
-            throw new AgeLessException("Возраст меньше 18.");
-        if (employee.PassportId <= 0)
-            throw new NotPassportDataException("У сотрудника нет пасспортных данных.");
-        _employeeStorage.Add(employee);
-    }
-
-    public List<Employee> GetEmployees(EmployeeFilter employeeFilter)
-    {
-        var request = _employeeStorage.Data.Select(c => c);
-
-        if (employeeFilter.Name != null && employeeFilter.Name != "")
-            request = request.Where(c =>
-                c.Name == employeeFilter.Name);
-        if (employeeFilter.Surname != null && employeeFilter.Surname != "")
-            request = request.Where(c =>
-                c.Surname == employeeFilter.Surname);
-        if (employeeFilter.Salary != 0)
-            request = request.Where(c =>
-                c.Salary == employeeFilter.Salary);
-        if (employeeFilter.Contract != null && employeeFilter.Contract != "")
-            request = request.Where(c =>
-                c.Salary == employeeFilter.Salary);
-        if (employeeFilter.PassportId != 0)
-            request = request.Where(c =>
-                c.PassportId == employeeFilter.PassportId);
-        if (employeeFilter.DateStart != new DateTime())
-            request = request.Where(c =>
-                c.DateBirth >= employeeFilter.DateStart);
-        if (employeeFilter.DateEnd != new DateTime())
-            request = request.Where(c =>
-                c.DateBirth <= employeeFilter.DateEnd);
-
-        return request.ToList();
-    }
-
-    public Employee GetEmployeeDb(Guid employeeId)
-    {
-        return _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
-    }
-
-    public void AddEmployeeDb(Employee employee)
-    {
-        _bankContext.Employees.Add(employee);
+        _bankContext.Employees.Add(new EmployeeDb(employee));
         _bankContext.SaveChanges();
     }
 
     public void ChangeEmployeeDb(Guid employeeId, Employee employee)
     {
-        var employeeIdDatabase = GetEmployeeDb(employeeId);
+        var employeeIdDatabase =_bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
         employeeIdDatabase.Name = employee.Name;
         employeeIdDatabase.Surname = employee.Surname;
         employeeIdDatabase.DateBirth = employee.DateBirth;
@@ -80,6 +52,7 @@ public class EmployeeService
         employeeIdDatabase.Contract = employee.Contract;
         employeeIdDatabase.Salary = employee.Salary;
         employeeIdDatabase.Bonus = employee.Bonus;
+        _bankContext.Update(employeeIdDatabase);
         _bankContext.SaveChanges();
     }
 
@@ -117,4 +90,37 @@ public class EmployeeService
 
         return request.ToList();
     }
+
+    public List<Employee> GetEmployees(EmployeeFilter employeeFilter)
+    {
+        var request = _employeeStorage.Data.Select(c => c);
+
+        if (employeeFilter.Name != null && employeeFilter.Name != "")
+            request = request.Where(c =>
+                c.Name == employeeFilter.Name);
+        if (employeeFilter.Surname != null && employeeFilter.Surname != "")
+            request = request.Where(c =>
+                c.Surname == employeeFilter.Surname);
+        if (employeeFilter.Salary != 0)
+            request = request.Where(c =>
+                c.Salary == employeeFilter.Salary);
+        if (employeeFilter.Contract != null && employeeFilter.Contract != "")
+            request = request.Where(c =>
+                c.Salary == employeeFilter.Salary);
+        if (employeeFilter.PassportId != 0)
+            request = request.Where(c =>
+                c.PassportId == employeeFilter.PassportId);
+        if (employeeFilter.DateStart != new DateTime())
+            request = request.Where(c =>
+                c.DateBirth >= employeeFilter.DateStart);
+        if (employeeFilter.DateEnd != new DateTime())
+            request = request.Where(c =>
+                c.DateBirth <= employeeFilter.DateEnd);
+
+        return request.ToList();
+    }
+
+    
+
+
 }

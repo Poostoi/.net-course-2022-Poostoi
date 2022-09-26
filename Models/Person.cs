@@ -7,7 +7,7 @@ public abstract class Person
         Id = new Guid();
     }
 
-    public Guid Id { get; private init; }
+    public Guid Id { get; protected set; }
     public int Bonus { get; set; }
 
     public string Surname { get; set; }

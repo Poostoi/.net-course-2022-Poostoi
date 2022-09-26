@@ -4,6 +4,17 @@ namespace ModelsDb;
 
 public class EmployeeDb: Person
 {
+    public EmployeeDb(Employee employee)
+    {
+        Surname = employee.Surname;
+        Name = employee.Name;
+        DateBirth = employee.DateBirth;
+        PassportId = employee.PassportId;
+        Bonus = employee.Bonus;
+        Id = employee.Id;
+        Salary = employee.Salary;
+        Contract = employee.Contract;
+    }
     public int Salary { get; set; }
     public string Contract { get; set; }
     public override bool Equals(object? obj)

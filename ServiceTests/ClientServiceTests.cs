@@ -55,7 +55,7 @@ public class ClientServiceTests
 
         //act
         clientService.AddClient(clientDb);
-        clientService.AddAccountDb(clientDb.Id);
+        clientService.AddAccount(clientDb.Id);
         clientService.GetClient(clientDb.Id);
         //assert
         Assert.True(clientService.GetClient(clientDb.Id).Accounts.Count==2);
@@ -73,7 +73,7 @@ public class ClientServiceTests
         clientService.AddClient(clientDbOld);
         var oldClientInDB = clientService.GetClient(clientDbOld.Id);
         var oldPassportId = oldClientInDB.PassportId;
-        clientService.ChangeClientDb(clientDbOld.Id,clientDbNew);
+        clientService.ChangeClient(clientDbOld.Id,clientDbNew);
         //assert
         Assert.False(clientService.GetClient(clientDbOld.Id).PassportId.Equals(oldPassportId));
     }
@@ -86,7 +86,7 @@ public class ClientServiceTests
 
         //act
         clientService.AddClient(clientDb);
-        clientService.RemoveClientDb(clientDb.Id);
+        clientService.RemoveClient(clientDb.Id);
         //assert
         Assert.Null(clientService.GetClient(clientDb.Id));
     }

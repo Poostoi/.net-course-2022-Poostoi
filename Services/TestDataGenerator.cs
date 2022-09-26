@@ -82,14 +82,11 @@ public class TestDataGenerator
                 ),
             NumberPhone = new Random().Next(111111, 999999),
             PassportId = new Random().Next(111111, 999999),
-            Accounts = new List<Account>(){GeneratingAccount()}
         };
 
 
     public Account GeneratingAccount() => new Account()
     {
-        CurrenciesDb = new List<Currency>(){GeneratingCurrency()},
-            
         Amount = new Random().Next(0, 100000)
     };
     public Currency GeneratingCurrency() => new Currency
