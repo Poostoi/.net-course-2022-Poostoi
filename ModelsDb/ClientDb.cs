@@ -2,7 +2,7 @@
 
 namespace ModelsDb;
 
-public class ClientDb : Person
+public class ClientDb : PersonDb
 {
     public ClientDb()
     {

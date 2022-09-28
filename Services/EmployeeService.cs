@@ -25,6 +25,7 @@ public class EmployeeService
     public Employee GetEmployee(Guid employeeId)
     {
         var employeeDb = _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
+        if (employeeDb == null) return null;
         return new Employee()
         {
             Bonus = employeeDb.Bonus,

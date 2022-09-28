@@ -1,6 +1,7 @@
 using Bogus;
 using Migration;
 using Models;
+using ModelsDb;
 using Services;
 using Services.ExceptionCraft;
 using Services.Filters;
@@ -39,27 +40,17 @@ public class ClientServiceTests
     public void AddClientDb_Client_ContainClient()
     {
         //arrange
-        var clientDb = new TestDataGenerator().GeneratingClient();
+        var client = new TestDataGenerator().GeneratingClient();
+        var clientNew = new TestDataGenerator().GeneratingClient();
         var clientService = new ClientService(new BankContext());
 
         //act
-        clientService.AddClient(clientDb);
+        clientService.AddClient(client);
+        clientService.ChangeClient(client.Id, clientNew);
         //assert
-        Assert.NotNull(clientService.GetClient(clientDb.Id));
+        Assert.NotNull(clientService.GetClient(client.Id));
     }
-    // [Test]
-    // public void AddAccountDb_Client_ContainAccountTwo()
-    // {
-    //     //arrange
-    //     var clientDb = new TestDataGenerator().GeneratingClient();
-    //     var clientService = new ClientService(new BankContext());
-    //
-    //     //act
-    //     clientService.AddClient(clientDb);
-    //     clientService.AddAccount(clientDb.Id);
-    //     //assert
-    //     Assert.True(clientService..Accounts.Count==2);
-    // }
+    
     [Test]
     public void ChangeClientDb_Client_NotEqual()
     {
@@ -81,13 +72,27 @@ public class ClientServiceTests
     public void DeleteClientDb_Client_NotClient()
     {
         //arrange
-        var clientDb = new TestDataGenerator().GeneratingClient();
+        var client = new TestDataGenerator().GeneratingClient();
         var clientService = new ClientService(new BankContext());
 
         //act
-        clientService.AddClient(clientDb);
-        clientService.RemoveClient(clientDb.Id);
+        clientService.AddClient(client);
+        clientService.RemoveClient(client.Id);
         //assert
-        Assert.Null(clientService.GetClient(clientDb.Id));
+        Assert.Null(clientService.GetClient(client.Id));
+    }
+    
+    [Test]
+    public void GetClients_Client_NotClient()
+    {
+        //arrange
+        var client = new TestDataGenerator().GeneratingClient();
+        var clientService = new ClientService(new BankContext());
+
+        //act
+        clientService.AddClient(client);
+        clientService.RemoveClient(client.Id);
+        //assert
+        Assert.Null(clientService.GetClient(client.Id));
     }
 }

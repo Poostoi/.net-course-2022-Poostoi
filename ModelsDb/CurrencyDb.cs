@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Models;
 
 namespace ModelsDb;
@@ -6,19 +7,20 @@ public class CurrencyDb
 {
     public CurrencyDb()
     {
-        Id = new Guid();
+        Id = Guid.NewGuid();
     }
 
     public CurrencyDb(Currency currency)
     {
         AccountDbs = new List<AccountDb>();
-        Id = new Guid();;
+        Id = currency.Id;;
         Code = currency.Code;
         Name = currency.Name;
     }
 
     public List<AccountDb> AccountDbs { get; set; }
-    public Guid Id { get; protected set; }
+    [Key]
+    public Guid Id { get; set; }
     public int Code { get; set; }
     public string Name { get; set; }
    

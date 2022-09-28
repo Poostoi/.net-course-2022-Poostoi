@@ -1,3 +1,4 @@
+using AutoMapper;
 using Migration;
 using Models;
 using ModelsDb;
@@ -11,6 +12,7 @@ public class ClientService
 {
     private IClientStorage _clientStorage;
     private BankContext _bankContext;
+    private MapperService _mapperService;
 
     public ClientService(IClientStorage clientStorage)
     {
@@ -20,21 +22,16 @@ public class ClientService
     public ClientService(BankContext bankContext)
     {
         _bankContext = bankContext;
+        _mapperService = new MapperService();
     }
+
+    
 
     public Client GetClient(Guid clientId)
     {
         var clientDb = _bankContext.Clients.FirstOrDefault(c => c.Id == clientId);
-
-        return new Client()
-        {
-            Bonus = clientDb.Bonus,
-            DateBirth = clientDb.DateBirth,
-            Name = clientDb.Name,
-            NumberPhone = clientDb.NumberPhone,
-            PassportId = clientDb.PassportId,
-            Surname = clientDb.Surname
-        };
+        if (clientDb == null) return null;
+        return _mapperService.MapperFromClientDbInClient.Map<Client>(clientDb);
     }
 
     public void AddClient(Client client)
@@ -63,12 +60,11 @@ public class ClientService
     public void ChangeClient(Guid clientId, Client client)
     {
         var clientInDatabase = _bankContext.Clients.FirstOrDefault(c => c.Id == clientId);
-        clientInDatabase.AccountsDbs = new List<AccountDb>();
         clientInDatabase.NumberPhone = client.NumberPhone;
+        clientInDatabase.Bonus = client.Bonus;
         clientInDatabase.Name = client.Name;
         clientInDatabase.Surname = client.Surname;
         clientInDatabase.DateBirth = client.DateBirth;
-        clientInDatabase.Bonus = client.Bonus;
         clientInDatabase.PassportId = client.PassportId;
         _bankContext.Update(clientInDatabase);
         _bankContext.SaveChanges();
@@ -86,7 +82,7 @@ public class ClientService
         _bankContext.SaveChanges();
     }
 
-    public List<Client> GetClientsDb(ClientFilter clientFilter)
+    public List<Client> GetClients(ClientFilter clientFilter)
     {
         var request = _bankContext.Clients.Select(c => c);
 
@@ -102,7 +98,6 @@ public class ClientService
         if (clientFilter.PassportId != 0)
             request = request.Where(c =>
                 c.PassportId == clientFilter.PassportId);
-
         if (clientFilter.DateStart != new DateTime())
             request = request.Where(c =>
                 c.DateBirth >= clientFilter.DateStart);
@@ -110,45 +105,8 @@ public class ClientService
             request = request.Where(c =>
                 c.DateBirth <= clientFilter.DateEnd);
 
-        return request.Select(clientDb => new Client()
-            {
-                Bonus = clientDb.Bonus,
-                DateBirth = clientDb.DateBirth,
-                Name = clientDb.Name,
-                NumberPhone = clientDb.NumberPhone,
-                PassportId = clientDb.PassportId,
-                Surname = clientDb.Surname
-            })
+        return request.Select(clientDb => _mapperService.MapperFromClientDbInClient .Map<Client>(clientDb))
             .ToList();
     }
 
-
-    public Dictionary<Client, Account> GetClients(ClientFilter clientFilter)
-    {
-        var request = _clientStorage.Data.Select(c => c);
-
-        if (clientFilter.Name != null && clientFilter.Name != "")
-            request = request.Where(c =>
-                c.Key.Name == clientFilter.Name);
-        if (clientFilter.Surname != null && clientFilter.Surname != "")
-            request = request.Where(c =>
-                c.Key.Surname == clientFilter.Surname);
-        if (clientFilter.NumberPhone != 0)
-            request = request.Where(c =>
-                c.Key.NumberPhone == clientFilter.NumberPhone);
-        if (clientFilter.PassportId != 0)
-            request = request.Where(c =>
-                c.Key.PassportId == clientFilter.PassportId);
-
-        if (clientFilter.DateStart != new DateTime())
-            request = request.Where(c =>
-                c.Key.DateBirth >= clientFilter.DateStart);
-        if (clientFilter.DateEnd != new DateTime())
-            request = request.Where(c =>
-                c.Key.DateBirth <= clientFilter.DateEnd);
-        request = request.ToDictionary(x => x.Key,
-            y => y.Value);
-
-        return (Dictionary<Client, Account>)request;
-    }
 }

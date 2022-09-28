@@ -3,6 +3,7 @@
 public class Client : Person
 {
     
+
     public int NumberPhone { get; set; }
 
     public override bool Equals(object? obj)

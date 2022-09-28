@@ -82,6 +82,7 @@ public class TestDataGenerator
                 ),
             NumberPhone = new Random().Next(111111, 999999),
             PassportId = new Random().Next(111111, 999999),
+            Bonus = new Random().Next(1,1000)
         };
 
 

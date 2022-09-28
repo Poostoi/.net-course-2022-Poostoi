@@ -2,7 +2,7 @@ using Models;
 
 namespace ModelsDb;
 
-public class EmployeeDb: Person
+public class EmployeeDb: PersonDb
 {
     public EmployeeDb(Employee employee)
     {
@@ -15,6 +15,11 @@ public class EmployeeDb: Person
         Salary = employee.Salary;
         Contract = employee.Contract;
     }
+
+    private EmployeeDb()
+    {
+    }
+
     public int Salary { get; set; }
     public string Contract { get; set; }
     public override bool Equals(object? obj)
