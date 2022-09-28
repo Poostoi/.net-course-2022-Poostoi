@@ -34,7 +34,7 @@ public class EmployeeServiceTests
         Assert.True(dictionary.Count >= 1);
     }
     [Test]
-    public void AddEmployeeDb_Employee_ContainEmployee()
+    public void AddEmployee_Employee_ContainEmployee()
     {
         //arrange
         var employee = new TestDataGenerator().GeneratingEmployee();
@@ -48,7 +48,7 @@ public class EmployeeServiceTests
     
     
     [Test]
-    public void ChangeEmployeeDb_Employee_NotEqual()
+    public void ChangeEmployee_Employee_NotEqual()
     {
         //arrange
         var employeeOld = new TestDataGenerator().GeneratingEmployee();
@@ -60,12 +60,12 @@ public class EmployeeServiceTests
         employeeService.AddEmployee(employeeOld);
         var oldEmployeeDbInDB = employeeService.GetEmployee(employeeOld.Id);
         var oldPassportId = oldEmployeeDbInDB.PassportId;
-        employeeService.ChangeEmployeeDb(employeeOld.Id,employeeNew);
+        employeeService.ChangeEmployee(employeeOld.Id,employeeNew);
         //assert
         Assert.False(employeeService.GetEmployee(employeeOld.Id).PassportId.Equals(oldPassportId));
     }
     [Test]
-    public void DeleteEmployeeDb_Employee_NotEmployee()
+    public void DeleteEmployee_Employee_NotEmployee()
     {
         //arrange
         var employee = new TestDataGenerator().GeneratingEmployee();

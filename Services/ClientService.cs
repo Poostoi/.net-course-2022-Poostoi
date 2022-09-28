@@ -36,7 +36,7 @@ public class ClientService
 
     public void AddClient(Client client)
     {
-        _bankContext.Clients.Add(new ClientDb(client));
+        _bankContext.Clients.Add(_mapperService.MapperFromClientInClientDb.Map<ClientDb>(client));
         _bankContext.SaveChanges();
     }
 
@@ -52,7 +52,7 @@ public class ClientService
     public void AddAccount(Guid clientId)
     {
         var clientDb = _bankContext.Clients.FirstOrDefault(c => c.Id == clientId);
-        clientDb.AccountsDbs.Add(new AccountDb(new TestDataGenerator().GeneratingAccount()));
+        clientDb.AccountsDbs.Add(new TestDataGenerator().GeneratingAccount());
         _bankContext.Update(clientDb);
         _bankContext.SaveChanges();
     }
@@ -76,9 +76,9 @@ public class ClientService
         _bankContext.SaveChanges();
     }
 
-    public void RemoveAccountDb(Client client, Account account)
+    public void RemoveAccount(Client client, Account account)
     {
-        _bankContext.Clients.FirstOrDefault(c => c.Id == client.Id).AccountsDbs.Remove(new AccountDb(account));
+        _bankContext.Clients.FirstOrDefault(c => c.Id == client.Id).AccountsDbs.Remove(account);
         _bankContext.SaveChanges();
     }
 

@@ -44,7 +44,7 @@ public class EmployeeService
         _bankContext.SaveChanges();
     }
 
-    public void ChangeEmployeeDb(Guid employeeId, Employee employee)
+    public void ChangeEmployee(Guid employeeId, Employee employee)
     {
         var employeeIdDatabase = _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
         employeeIdDatabase.Name = employee.Name;
@@ -65,7 +65,7 @@ public class EmployeeService
         _bankContext.SaveChanges();
     }
 
-    public List<Employee> GetEmployeeDbs(EmployeeFilter employeeFilter)
+    public List<Employee> GetEmployees(EmployeeFilter employeeFilter)
     {
         var request = _bankContext.Employees.Select(c => c);
 
@@ -102,34 +102,5 @@ public class EmployeeService
                 Salary = employeeDb.Salary
             })
             .ToList();
-    }
-
-    public List<Employee> GetEmployees(EmployeeFilter employeeFilter)
-    {
-        var request = _employeeStorage.Data.Select(c => c);
-
-        if (employeeFilter.Name != null && employeeFilter.Name != "")
-            request = request.Where(c =>
-                c.Name == employeeFilter.Name);
-        if (employeeFilter.Surname != null && employeeFilter.Surname != "")
-            request = request.Where(c =>
-                c.Surname == employeeFilter.Surname);
-        if (employeeFilter.Salary != 0)
-            request = request.Where(c =>
-                c.Salary == employeeFilter.Salary);
-        if (employeeFilter.Contract != null && employeeFilter.Contract != "")
-            request = request.Where(c =>
-                c.Salary == employeeFilter.Salary);
-        if (employeeFilter.PassportId != 0)
-            request = request.Where(c =>
-                c.PassportId == employeeFilter.PassportId);
-        if (employeeFilter.DateStart != new DateTime())
-            request = request.Where(c =>
-                c.DateBirth >= employeeFilter.DateStart);
-        if (employeeFilter.DateEnd != new DateTime())
-            request = request.Where(c =>
-                c.DateBirth <= employeeFilter.DateEnd);
-
-        return request.ToList();
     }
 }

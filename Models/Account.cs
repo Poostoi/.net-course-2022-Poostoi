@@ -2,11 +2,6 @@ namespace Models;
 
 public class Account
 {
-    public Account()
-    {
-        Id = Guid.NewGuid();
-    }
-
     public Guid Id { get; set; }
     public Currency Currency { get; set; }
     public int Amount { get; set; }

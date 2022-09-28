@@ -73,6 +73,7 @@ public class TestDataGenerator
     public Client GeneratingClient() =>
         new Client()
         {
+            Id = Guid.NewGuid(),
             Surname = new Faker("ru").Name.FirstName(Name.Gender.Male),
             Name = new Faker("ru").Name.LastName(Name.Gender.Male),
             DateBirth = new DateTime(
@@ -88,16 +89,20 @@ public class TestDataGenerator
 
     public Account GeneratingAccount() => new Account()
     {
+        Id = Guid.NewGuid(),
+        Currency = GeneratingCurrency(),
         Amount = new Random().Next(0, 100000)
     };
     public Currency GeneratingCurrency() => new Currency
         {
+            Id = Guid.NewGuid(),
             Code = new Random().Next(0, 2000),
             Name = _currenciesName[new Random().Next(0, 14)]
         };
     
     public Employee GeneratingEmployee() => new Employee()
     {
+        Id = Guid.NewGuid(),
         Surname = new Faker("ru").Name.FirstName(Name.Gender.Male),
         Name = new Faker("ru").Name.LastName(Name.Gender.Male),
         DateBirth = new DateTime(

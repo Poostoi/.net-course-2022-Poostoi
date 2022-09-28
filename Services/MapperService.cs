@@ -13,10 +13,14 @@ public class MapperService
     {
         MapperFromClientDbInClient = new Mapper(new MapperConfiguration(cfg =>
             cfg.CreateMap<ClientDb, Client>()));
-        var config = new MapperConfiguration(cfg => cfg.CreateMap<Client, ClientDb>()
+        MapperFromClientInClientDb = new Mapper(ConfigurateClientInClientDb());
+    }
+
+    private IConfigurationProvider ConfigurateClientInClientDb()
+    {
+        return new MapperConfiguration(cfg => cfg.CreateMap<Client, ClientDb>()
             .ForMember(desc => desc.AccountsDbs, src => new List<AccountDb>())
             .ForMember(desc => desc.Id, src => src.Ignore()));
-        MapperFromClientInClientDb = new Mapper(config);
     }
     
 }

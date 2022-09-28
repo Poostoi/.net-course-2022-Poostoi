@@ -37,7 +37,7 @@ public class ClientServiceTests
         Assert.Throws<NotPassportDataException>(() => clientService.AddAccount(client));
     }
     [Test]
-    public void AddClientDb_Client_ContainClient()
+    public void AddClient_Client_ContainClient()
     {
         //arrange
         var client = new TestDataGenerator().GeneratingClient();
@@ -52,7 +52,7 @@ public class ClientServiceTests
     }
     
     [Test]
-    public void ChangeClientDb_Client_NotEqual()
+    public void ChangeClient_Client_NotEqual()
     {
         //arrange
         var clientDbOld = new TestDataGenerator().GeneratingClient();
@@ -69,7 +69,7 @@ public class ClientServiceTests
         Assert.False(clientService.GetClient(clientDbOld.Id).PassportId.Equals(oldPassportId));
     }
     [Test]
-    public void DeleteClientDb_Client_NotClient()
+    public void DeleteClient_Client_NotClient()
     {
         //arrange
         var client = new TestDataGenerator().GeneratingClient();
@@ -82,17 +82,5 @@ public class ClientServiceTests
         Assert.Null(clientService.GetClient(client.Id));
     }
     
-    [Test]
-    public void GetClients_Client_NotClient()
-    {
-        //arrange
-        var client = new TestDataGenerator().GeneratingClient();
-        var clientService = new ClientService(new BankContext());
-
-        //act
-        clientService.AddClient(client);
-        clientService.RemoveClient(client.Id);
-        //assert
-        Assert.Null(clientService.GetClient(client.Id));
-    }
+    
 }
