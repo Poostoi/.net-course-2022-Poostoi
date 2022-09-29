@@ -49,10 +49,12 @@ public class ClientService
         _clientStorage.Add(client);
     }
 
-    public void AddAccount(Guid clientId)
+    public void AddAccount(Guid clientId, Account account)
     {
         var clientDb = _bankContext.Clients.FirstOrDefault(c => c.Id == clientId);
-        clientDb.AccountsDbs.Add(new TestDataGenerator().GeneratingAccount());
+        var accountDb = _mapperService.MapperFromAccountInAccountDb.Map<AccountDb>(account);
+        accountDb.ClientDb = clientDb;
+        clientDb.AccountsDbs.Add(accountDb);
         _bankContext.Update(clientDb);
         _bankContext.SaveChanges();
     }
@@ -78,7 +80,8 @@ public class ClientService
 
     public void RemoveAccount(Client client, Account account)
     {
-        _bankContext.Clients.FirstOrDefault(c => c.Id == client.Id).AccountsDbs.Remove(account);
+        var accountDb = _mapperService.MapperFromAccountInAccountDb.Map<AccountDb>(account);
+        _bankContext.Clients.FirstOrDefault(c => c.Id == client.Id).AccountsDbs.Remove(accountDb);
         _bankContext.SaveChanges();
     }
 

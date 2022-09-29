@@ -11,6 +11,8 @@ public class EmployeeService
 {
     private EmployeeStorage _employeeStorage;
     private BankContext _bankContext;
+    private MapperService _mapperService;
+
 
     public EmployeeService(EmployeeStorage employeeStorage)
     {
@@ -20,27 +22,19 @@ public class EmployeeService
     public EmployeeService(BankContext bankContext)
     {
         _bankContext = bankContext;
+        _mapperService = new MapperService();
     }
 
     public Employee GetEmployee(Guid employeeId)
     {
         var employeeDb = _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
         if (employeeDb == null) return null;
-        return new Employee()
-        {
-            Bonus = employeeDb.Bonus,
-            DateBirth = employeeDb.DateBirth,
-            Name = employeeDb.Name,
-            PassportId = employeeDb.PassportId,
-            Surname = employeeDb.Surname,
-            Contract = employeeDb.Contract,
-            Salary = employeeDb.Salary
-        };
+        return _mapperService.MapperFromEmployeeDbInEmployee.Map<Employee>(employeeDb);
     }
 
     public void AddEmployee(Employee employee)
     {
-        _bankContext.Employees.Add(new EmployeeDb(employee));
+        _bankContext.Employees.Add(_mapperService.MapperFromEmployeeInEmployeeDb.Map<EmployeeDb>(employee));
         _bankContext.SaveChanges();
     }
 
@@ -91,16 +85,8 @@ public class EmployeeService
             request = request.Where(c =>
                 c.DateBirth <= employeeFilter.DateEnd);
         var employeeDbs = request.ToList();
-        return employeeDbs.Select(employeeDb => new Employee()
-            {
-                Bonus = employeeDb.Bonus,
-                DateBirth = employeeDb.DateBirth,
-                Name = employeeDb.Name,
-                PassportId = employeeDb.PassportId,
-                Surname = employeeDb.Surname,
-                Contract = employeeDb.Contract,
-                Salary = employeeDb.Salary
-            })
+        return employeeDbs.Select(employeeDb =>
+                _mapperService.MapperFromEmployeeDbInEmployee.Map<Employee>(employeeDb))
             .ToList();
     }
 }

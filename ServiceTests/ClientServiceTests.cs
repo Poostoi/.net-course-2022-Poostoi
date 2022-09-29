@@ -81,6 +81,26 @@ public class ClientServiceTests
         //assert
         Assert.Null(clientService.GetClient(client.Id));
     }
-    
+    [Test]
+    public void GetClient_ClientFilterAndClientService_CountDictionaryOne()
+    {
+        //arrange
+        var filter = new ClientFilter()
+        {
+            Name = "Михаил",
+            DateEnd = new DateTime(1992, 03, 15)
+        };
+        var clientService = new ClientService(new BankContext());
+        var client = new TestDataGenerator().GeneratingClient();
+        client.Name = "Михаил";
+        client.DateBirth = new DateTime(1991, 02, 28);
+        for (var i = 0; i < 50; i++)
+            clientService.AddClient(new TestDataGenerator().GeneratingClient());
+        clientService.AddClient(client);
+        //act
+        var list = clientService.GetClients(filter);
+        //assert
+        Assert.True(list.Count >= 1);
+    }
     
 }
