@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using ModelsDb;
 
@@ -17,11 +18,14 @@ public class BankContext : DbContext
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        // var connectionString = ConfigurationManager
+            // .ConnectionStrings["Postgres"].ConnectionString;
         optionsBuilder.UseNpgsql("Host=localhost;" +
                                  "Port = 5432;" +
                                  "Database = postgres;" +
                                  "Username = postgres;" +
-                                 "Password = 37242");
+                                 "Password = 1111");
+        
     }
     
 }
