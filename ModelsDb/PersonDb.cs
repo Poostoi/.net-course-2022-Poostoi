@@ -1,13 +1,10 @@
-﻿namespace Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-public abstract class Person
+namespace Models;
+
+public abstract class PersonDb
 {
-    protected Person()
-    {
-        Id =  Guid.NewGuid();
-    }
-
-    public Guid Id { get; set; }
+    [Key] public Guid Id { get; set; }
     public int Bonus { get; set; }
     public string Surname { get; set; }
     public string Name { get; set; }

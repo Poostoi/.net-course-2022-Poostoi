@@ -14,9 +14,10 @@ public class BankServiceTest
         var testDate = new TestDataGenerator();
         var client = testDate.GeneratingClient();
         //assert
+        var oldBonus = client.Bonus;
         bankService.AddBonus(client);
         //act
-        Assert.AreEqual(client.Bonus,1);
+        Assert.AreEqual(client.Bonus-oldBonus,1);
     }
     [Test]
     public void AddToBlackList_Client_BlackListContainsClientEmployee()

@@ -7,6 +7,11 @@ namespace Services;
 
 public class TestDataGenerator
 {
+    private List<string> _currenciesName = new List<string>()
+    {
+        "usd","euro","dinar","lev","real","krone","dinar","ruble","hryvnia",
+        "franc","yen","kuna","peso", "yane"
+    };
     public List<Client> GenerateListClient(int count)
     {
         var listClient = new List<Client>();
@@ -68,6 +73,7 @@ public class TestDataGenerator
     public Client GeneratingClient() =>
         new Client()
         {
+            Id = Guid.NewGuid(),
             Surname = new Faker("ru").Name.FirstName(Name.Gender.Male),
             Name = new Faker("ru").Name.LastName(Name.Gender.Male),
             DateBirth = new DateTime(
@@ -76,21 +82,27 @@ public class TestDataGenerator
                 new Random().Next(1, 28)
                 ),
             NumberPhone = new Random().Next(111111, 999999),
-            PassportId = new Random().Next(111111, 999999)
+            PassportId = new Random().Next(111111, 999999),
+            Bonus = new Random().Next(1,1000)
         };
 
 
     public Account GeneratingAccount() => new Account()
     {
-        Currency = new Currency
-        {
-            Code = new Random().Next(0, 2000),
-            Name = "usd"
-        },
+        Id = Guid.NewGuid(),
+        Currency = GeneratingCurrency(),
         Amount = new Random().Next(0, 100000)
     };
+    public Currency GeneratingCurrency() => new Currency
+        {
+            Id = Guid.NewGuid(),
+            Code = new Random().Next(0, 2000),
+            Name = _currenciesName[new Random().Next(0, 14)]
+        };
+    
     public Employee GeneratingEmployee() => new Employee()
     {
+        Id = Guid.NewGuid(),
         Surname = new Faker("ru").Name.FirstName(Name.Gender.Male),
         Name = new Faker("ru").Name.LastName(Name.Gender.Male),
         DateBirth = new DateTime(

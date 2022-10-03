@@ -1,4 +1,7 @@
+using Bogus;
+using Migration;
 using Models;
+using ModelsDb;
 using Services;
 using Services.ExceptionCraft;
 using Services.Filters;
@@ -33,50 +36,71 @@ public class ClientServiceTests
         //assert act
         Assert.Throws<NotPassportDataException>(() => clientService.AddAccount(client));
     }
-
     [Test]
-    public void GetClients_ClientFilterAndClientStorage_CountDictionaryOne()
+    public void AddClient_Client_ContainClient()
+    {
+        //arrange
+        var client = new TestDataGenerator().GeneratingClient();
+        var clientNew = new TestDataGenerator().GeneratingClient();
+        var clientService = new ClientService(new BankContext());
+
+        //act
+        clientService.AddClient(client);
+        clientService.ChangeClient(client.Id, clientNew);
+        //assert
+        Assert.NotNull(clientService.GetClient(client.Id));
+    }
+    
+    [Test]
+    public void ChangeClient_Client_NotEqual()
+    {
+        //arrange
+        var clientDbOld = new TestDataGenerator().GeneratingClient();
+        var clientDbNew = new TestDataGenerator().GeneratingClient();
+        var clientService = new ClientService(new BankContext());
+        
+
+        //act
+        clientService.AddClient(clientDbOld);
+        var oldClientInDB = clientService.GetClient(clientDbOld.Id);
+        var oldPassportId = oldClientInDB.PassportId;
+        clientService.ChangeClient(clientDbOld.Id,clientDbNew);
+        //assert
+        Assert.False(clientService.GetClient(clientDbOld.Id).PassportId.Equals(oldPassportId));
+    }
+    [Test]
+    public void DeleteClient_Client_NotClient()
+    {
+        //arrange
+        var client = new TestDataGenerator().GeneratingClient();
+        var clientService = new ClientService(new BankContext());
+
+        //act
+        clientService.AddClient(client);
+        clientService.RemoveClient(client.Id);
+        //assert
+        Assert.Null(clientService.GetClient(client.Id));
+    }
+    [Test]
+    public void GetClient_ClientFilterAndClientService_CountDictionaryOne()
     {
         //arrange
         var filter = new ClientFilter()
         {
-            Surname = "Николаев",
-            DateStart = new DateTime(1999, 11, 1),
-            DateEnd = DateTime.Now
+            Name = "Михаил",
+            DateEnd = new DateTime(1992, 03, 15)
         };
-        var clientStorage = new ClientStorage();
+        var clientService = new ClientService(new BankContext());
         var client = new TestDataGenerator().GeneratingClient();
         client.Name = "Михаил";
-        client.Surname = "Николаев";
-        client.DateBirth = new DateTime(2000, 11, 2);
-
-        //act
+        client.DateBirth = new DateTime(1991, 02, 28);
         for (var i = 0; i < 50; i++)
-            clientStorage.Add(new TestDataGenerator().GeneratingClient());
-
-        clientStorage.Add(client);
-        var clientService = new ClientService(clientStorage);
-        var dictionary = clientService.GetClients(filter);
-
-        //assert
-        var averageAge = clientStorage.Data.Average(c => DateTime.Now.Year - c.Key.DateBirth.Year);
-        Assert.True(dictionary.Count == 1);
-    }
-
-    [Test]
-    public void GetClients_OldestClient_EqualTrue()
-    {
-        //arrange
-        var clientStorage = new ClientStorage();
-        var oldestClient = new TestDataGenerator().GeneratingClient();
-        oldestClient.DateBirth = new DateTime(1899, 11, 2);
-
+            clientService.AddClient(new TestDataGenerator().GeneratingClient());
+        clientService.AddClient(client);
         //act
-        for (var i = 0; i < 50; i++)
-            clientStorage.Add(new TestDataGenerator().GeneratingClient());
-        clientStorage.Add(oldestClient);
-
+        var list = clientService.GetClients(filter);
         //assert
-        Assert.That(clientStorage.Data.Min(c => c.Key.DateBirth), Is.EqualTo(oldestClient.DateBirth));
+        Assert.True(list.Count >= 1);
     }
+    
 }

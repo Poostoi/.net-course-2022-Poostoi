@@ -21,7 +21,6 @@ public class ClientStorage : IClientStorage
         if (!Data.ContainsKey(client)) return;
         var existAccount = Data[client];
         existAccount.Amount = account.Amount;
-        existAccount.Currency = account.Currency;
     }
 
     public void DeleteAccount(Client client, Account account)

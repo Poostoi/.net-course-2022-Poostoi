@@ -1,14 +1,15 @@
 ﻿namespace Models;
 
-public class Client:Person
+public class Client : Person
 {
     public int NumberPhone { get; set; }
+
     public override bool Equals(object? obj)
     {
         if (obj is not Client)
             return false;
         var client = (Client)obj;
-        
+
         return client.NumberPhone == NumberPhone &&
                client.Surname == Surname &&
                client.Name == Name &&
@@ -18,10 +19,10 @@ public class Client:Person
 
     public override int GetHashCode()
     {
-        return NumberPhone.GetHashCode()+
-               Name.GetHashCode()+
-               Surname.GetHashCode()+
-               DateBirth.GetHashCode()+
+        return NumberPhone.GetHashCode() +
+               Name.GetHashCode() +
+               Surname.GetHashCode() +
+               DateBirth.GetHashCode() +
                PassportId.GetHashCode();
     }
 }
