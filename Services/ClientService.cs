@@ -111,5 +111,9 @@ public class ClientService
         return request.Select(clientDb => _mapperService.MapperFromClientDbInClient .Map<Client>(clientDb))
             .ToList();
     }
+    public void FromCsvFileInDatabase(string pathToFile, string fileName)
+    {
+       
+    }
 
 }

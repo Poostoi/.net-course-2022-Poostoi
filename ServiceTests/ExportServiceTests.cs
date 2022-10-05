@@ -1,5 +1,6 @@
 ﻿using ExportTool;
 using Migration;
+using Models;
 using Services;
 
 namespace ServiceTests;
@@ -20,6 +21,7 @@ public class ExportServiceTests
         //assert
         Assert.NotNull(tests);
     }
+
     [Test]
     public void FromCsvFileInDatabase_ListClient_ClientEqualsClientInDb()
     {
@@ -32,9 +34,22 @@ public class ExportServiceTests
         var fileName = "clients.csv";
         //act
         exportService.ExportClientsInFileCSV(clients, path, fileName);
-        exportService.FromCsvFileInDatabase(path, fileName);
+
+        var clientInFile = exportService.ReadPersonFromCsv(path, fileName);
+        if (clientInFile == null) return;
+        var clientService = new ClientService(new BankContext());
+        foreach (var c in clientInFile)
+        {
+            clientService.AddClient((Client)c);
+        }
         var expectedClient = new ClientService(new BankContext()).GetClient(client.Id);
+        var result  = expectedClient.Name == client.Name&&
+                      expectedClient.Surname == client.Surname&&
+                      expectedClient.NumberPhone == client.NumberPhone&&
+                      expectedClient.Bonus == client.Bonus&&
+                      expectedClient.DateBirth == client.DateBirth&&
+                      expectedClient.Id == client.Id;
         //assert
-        Assert.AreEqual(expectedClient,client);
+        Assert.True(result);
     }
 }

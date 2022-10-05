@@ -18,7 +18,7 @@ public class ExportService
             dirInfo.Create();
         }
 
-        string fullPath = GetFullPathToFile(pathToFile, fileName);
+        string fullPath = Path.Combine(pathToFile, fileName);
         using (FileStream fileStream = new FileStream(fullPath, FileMode.OpenOrCreate))
         {
             using (StreamWriter streamWriter = new StreamWriter(fileStream, System.Text.Encoding.UTF8))
@@ -38,7 +38,7 @@ public class ExportService
     public IEnumerable ReadPersonFromCsv(string pathToFile, string fileName)
     {
         IEnumerable clientReader;
-        string fullPath = GetFullPathToFile(pathToFile, fileName);
+        string fullPath = Path.Combine(pathToFile, fileName);
         using (FileStream fileStream = new FileStream(fullPath, FileMode.OpenOrCreate))
         {
             using (StreamReader streamReader = new StreamReader(fileStream, System.Text.Encoding.UTF8))
@@ -55,22 +55,5 @@ public class ExportService
         }
 
         return clientReader;
-    }
-
-    public void FromCsvFileInDatabase(string pathToFile, string fileName)
-    {
-        var clientInFile = ReadPersonFromCsv(pathToFile, fileName);
-        if (clientInFile == null) return;
-        var clientService = new ClientService(new BankContext());
-        foreach (var client in clientInFile)
-        {
-            clientService.AddClient((Client)client);
-        }
-    }
-
-
-    private string GetFullPathToFile(string pathToFile, string fileName)
-    {
-        return Path.Combine(pathToFile, fileName);
     }
 }
