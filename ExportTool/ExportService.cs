@@ -1,7 +1,10 @@
-﻿using System.Globalization;
+﻿using System.Collections;
+using System.Globalization;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Migration;
 using Models;
+using Services;
 
 namespace ExportTool;
 
@@ -15,60 +18,54 @@ public class ExportService
             dirInfo.Create();
         }
 
-        foreach (var client in clients)
-        {
-            ExportClientCSV(client, pathToFile, fileName);
-        }
-    }
-
-    private void ExportClientCSV(Client client, string pathToFile, string fileName)
-    {
         string fullPath = GetFullPathToFile(pathToFile, fileName);
         using (FileStream fileStream = new FileStream(fullPath, FileMode.OpenOrCreate))
         {
-            using (StreamWriter streamWriter = new StreamWriter(fileStream))
+            using (StreamWriter streamWriter = new StreamWriter(fileStream, System.Text.Encoding.UTF8))
             {
-                using (var writer = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))
+                var config = new CsvConfiguration(CultureInfo.CurrentCulture)
+                    { Delimiter = ";" };
+                using (var writer = new CsvWriter(streamWriter, config))
                 {
-                    writer.WriteField(nameof(client.Id));
-                    writer.WriteField(nameof(client.Surname));
-                    writer.WriteField(nameof(client.Name));
-                    writer.WriteField(nameof(client.DateBirth));
-                    writer.WriteField(nameof(client.PassportId));
-                    writer.WriteField(nameof(client.Bonus));
-                    writer.WriteField(nameof(client.NumberPhone));
-                    writer.NextRecord();
-                    writer.WriteField(client.Id);
-                    writer.WriteField(client.Surname);
-                    writer.WriteField(client.Name);
-                    writer.WriteField(client.DateBirth);
-                    writer.WriteField(client.PassportId);
-                    writer.WriteField(client.Bonus);
-                    writer.WriteField(client.NumberPhone);
-                    writer.NextRecord();
+                    writer.WriteRecords(clients);
                     writer.Flush();
                 }
             }
         }
     }
 
-    public List<Client> ReadPersonFromCsv(string pathToFile, string fileName)
+
+    public IEnumerable ReadPersonFromCsv(string pathToFile, string fileName)
     {
-        List<Client> clientReader;
+        IEnumerable clientReader;
         string fullPath = GetFullPathToFile(pathToFile, fileName);
         using (FileStream fileStream = new FileStream(fullPath, FileMode.OpenOrCreate))
         {
-            using (StreamReader streamReader = new StreamReader(fileStream))
+            using (StreamReader streamReader = new StreamReader(fileStream, System.Text.Encoding.UTF8))
             {
-                using (var reader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+                var config = new CsvConfiguration(CultureInfo.CurrentCulture)
+                    { Delimiter = ";" };
+                using (var reader = new CsvReader(streamReader, config))
                 {
                     reader.Read();
+                    reader.ReadHeader();
                     clientReader = reader.GetRecords<Client>().ToList();
                 }
             }
         }
 
         return clientReader;
+    }
+
+    public void FromCsvFileInDatabase(string pathToFile, string fileName)
+    {
+        var clientInFile = ReadPersonFromCsv(pathToFile, fileName);
+        if (clientInFile == null) return;
+        var clientService = new ClientService(new BankContext());
+        foreach (var client in clientInFile)
+        {
+            clientService.AddClient((Client)client);
+        }
     }
 
 
