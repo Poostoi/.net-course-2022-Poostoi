@@ -1,51 +1,87 @@
 ﻿using Services;
 using System.Threading;
+using ExportTool;
+using Migration;
 using Models;
+using Services.Filters;
 
 namespace ServiceTests;
 
 public class ThreadAndTaskTests
 {
-    
+    private object _key = new();
+    private Account _account = new TestDataGenerator().GeneratingAccount();
+
     [Test]
-    public void ParallelAccrual_Client_NotEqual1000()
+    public void ParallelAccrual_Client_Equal2000()
     {
         //arrange
-        var account = new TestDataGenerator().GeneratingAccount();
-        var oldAmountAccount = account.Amount;
-        object[] parametr = new object[] { account, 10 };
-        Thread firstThread = new(Test);
+        _account.Amount = 0;
+        Thread firstThread = new(Accrual);
         firstThread.Name = "Первый";
-        Thread secondThread = new(Test);
+        Thread secondThread = new(Accrual);
         secondThread.Name = "Второй";
 
-
         //act
-        firstThread.Start(parametr);
-        secondThread.Start(parametr);
-        
+        firstThread.Start(10);
+        secondThread.Start(10);
 
         //assert
-        //Assert.AreEqual(account.Amount - oldAmountAccount, 2000);
         Thread.Sleep(10000);
-        Assert.True(true);
+        Assert.AreEqual(_account.Amount, 2000);
     }
 
-    object key = new();
 
-    private void Test(object? o)
+    private void Accrual(object? o)
     {
-        var array = (object[])o;
-        var account = (Account)array[0];
-        var count = (int)array[1];
-        lock (key)
+        var count = (int)o!;
+        lock (_key)
         {
             for (int i = 0; i < count; i++)
             {
-                account.Amount += 100;
+                _account.Amount += 100;
                 Console.WriteLine(
-                    $"{Thread.CurrentThread.Name} {i}поток, значение счёта увеличилось на 100, сейчас: {account.Amount}");
+                    $"{i}.{Thread.CurrentThread.Name} поток, значение счёта увеличилось на 100, сейчас: {_account.Amount}");
             }
         }
     }
+
+    [Test]
+    public void ExportFromDbAndImportInDb_PathOnFiles_StringMore1000()
+    {
+        //arrange
+        Thread firstThread = new(ImportDb);
+        firstThread.Name = "Первый";
+        Thread secondThread = new(ExportDb);
+        secondThread.Name = "Второй";
+        var path = Path.Combine("C:", "test");
+        var fileName = "clients.csv";
+        //act
+        firstThread.Start();
+        secondThread.Start();
+        Thread.Sleep(10000);
+
+        var clients = new ExportService().ReadPersonFromCsv(path, fileName);
+        //assert
+        Assert.True(true);
+    }
+
+    private void ImportDb()
+    {
+        var clients = new TestDataGenerator().GenerateListClient(1000);
+        var clientService = new ClientService(new BankContext());
+        foreach (var c in clients)
+        {
+            clientService.AddClient(c);
+        }
+    }
+    private void ExportDb()
+    {
+        var clientService = new ClientService(new BankContext());
+        List<Client> clients = clientService.GetClients(new ClientFilter());
+        var path = Path.Combine("C:", "test");
+        var fileName = "clients.csv";
+        new ExportService().ExportClientsInFileCSV(clients, path, fileName);
+    }
+    
 }

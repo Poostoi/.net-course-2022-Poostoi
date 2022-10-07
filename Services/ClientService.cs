@@ -25,7 +25,6 @@ public class ClientService
         _mapperService = new MapperService();
     }
 
-    
 
     public Client GetClient(Guid clientId)
     {
@@ -108,12 +107,11 @@ public class ClientService
             request = request.Where(c =>
                 c.DateBirth <= clientFilter.DateEnd);
 
-        return request.Select(clientDb => _mapperService.MapperFromClientDbInClient .Map<Client>(clientDb))
+        return request.Select(clientDb => _mapperService.MapperFromClientDbInClient.Map<Client>(clientDb))
             .ToList();
     }
+
     public void FromCsvFileInDatabase(string pathToFile, string fileName)
     {
-       
     }
-
 }
