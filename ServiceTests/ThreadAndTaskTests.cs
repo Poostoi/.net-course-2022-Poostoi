@@ -50,6 +50,8 @@ public class ThreadAndTaskTests
     public void ExportFromDbAndImportInDb_PathOnFiles_StringMore1000()
     {
         //arrange
+        var clientService = new ClientService(new BankContext());
+        var countUpToUpdate = clientService.GetClients(new ClientFilter()).Count;
         Thread firstThread = new(ImportDb);
         firstThread.Name = "Первый";
         Thread secondThread = new(ExportDb);
@@ -59,11 +61,12 @@ public class ThreadAndTaskTests
         //act
         firstThread.Start();
         secondThread.Start();
+       
         Thread.Sleep(10000);
-
+        List<Client> clientsFromDb = clientService.GetClients(new ClientFilter());
         var clients = new ExportService().ReadPersonFromCsv(path, fileName);
         //assert
-        Assert.True(true);
+        Assert.True(clients.Count  >= countUpToUpdate );
     }
 
     private void ImportDb()
@@ -73,8 +76,10 @@ public class ThreadAndTaskTests
         foreach (var c in clients)
         {
             clientService.AddClient(c);
+            
         }
     }
+
     private void ExportDb()
     {
         var clientService = new ClientService(new BankContext());
@@ -83,5 +88,4 @@ public class ThreadAndTaskTests
         var fileName = "clients.csv";
         new ExportService().ExportClientsInFileCSV(clients, path, fileName);
     }
-    
 }
