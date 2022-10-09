@@ -18,8 +18,9 @@ public class ExportService
             dirInfo.Create();
         }
 
+        var clientsInFile = ReadPersonFromCsv(pathToFile, fileName);
         string fullPath = Path.Combine(pathToFile, fileName);
-        using (FileStream fileStream = new FileStream(fullPath, FileMode.OpenOrCreate))
+        using (FileStream fileStream = new FileStream(fullPath, FileMode.Append))
         {
             using (StreamWriter streamWriter = new StreamWriter(fileStream, System.Text.Encoding.UTF8))
             {
@@ -27,17 +28,29 @@ public class ExportService
                     { Delimiter = ";" };
                 using (var writer = new CsvWriter(streamWriter, config))
                 {
-                    writer.WriteRecords(clients);
-                    writer.Flush();
+                    if(clientsInFile==null)
+                    {
+                        writer.WriteRecords(clients);
+                        writer.Flush();
+                    }
+                    else
+                    {
+                        foreach (var client in clients)
+                        {
+                            writer.WriteRecord(client);
+                            writer.NextRecord();
+                        }
+                        writer.Flush();
+                    }
                 }
             }
         }
     }
 
 
-    public IEnumerable ReadPersonFromCsv(string pathToFile, string fileName)
+    public List<Client>? ReadPersonFromCsv(string pathToFile, string fileName)
     {
-        IEnumerable clientReader;
+        List<Client> clientReader = null;
         string fullPath = Path.Combine(pathToFile, fileName);
         using (FileStream fileStream = new FileStream(fullPath, FileMode.OpenOrCreate))
         {
@@ -48,8 +61,11 @@ public class ExportService
                 using (var reader = new CsvReader(streamReader, config))
                 {
                     reader.Read();
-                    reader.ReadHeader();
-                    clientReader = reader.GetRecords<Client>().ToList();
+                    if(reader.Parser.Count!=0)
+                    {
+                        reader.ReadHeader();
+                        clientReader = reader.GetRecords<Client>().ToList();
+                    }
                 }
             }
         }
