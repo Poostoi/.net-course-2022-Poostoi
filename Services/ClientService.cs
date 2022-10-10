@@ -110,8 +110,43 @@ public class ClientService
         return request.Select(clientDb => _mapperService.MapperFromClientDbInClient.Map<Client>(clientDb))
             .ToList();
     }
-
-    public void FromCsvFileInDatabase(string pathToFile, string fileName)
+    public List<Client> GetClientsLimit(ClientFilter clientFilter, int count)
     {
+        var request = _bankContext.Clients.Select(c => c);
+
+        if (clientFilter.Name != null && clientFilter.Name != "")
+            request = request.Where(c =>
+                c.Name == clientFilter.Name);
+        if (clientFilter.Surname != null && clientFilter.Surname != "")
+            request = request.Where(c =>
+                c.Surname == clientFilter.Surname);
+        if (clientFilter.NumberPhone != 0)
+            request = request.Where(c =>
+                c.NumberPhone == clientFilter.NumberPhone);
+        if (clientFilter.PassportId != 0)
+            request = request.Where(c =>
+                c.PassportId == clientFilter.PassportId);
+        if (clientFilter.DateStart != new DateTime())
+            request = request.Where(c =>
+                c.DateBirth >= clientFilter.DateStart);
+        if (clientFilter.DateEnd != new DateTime())
+            request = request.Where(c =>
+                c.DateBirth <= clientFilter.DateEnd);
+        var list = request.Select(clientDb => _mapperService.MapperFromClientDbInClient.Map<Client>(clientDb))
+            .ToList();
+        
+        return list.GetRange(0,count);
     }
+
+    public void UpdateAccount(Client client, Account newAccount)
+    {
+        var clientDb =_bankContext.Clients.FirstOrDefault(c => c.Id == client.Id);
+        var oldAccount = clientDb.AccountsDbs.FirstOrDefault(a => a.Id == newAccount.Id);
+        oldAccount.Amount = newAccount.Amount;
+        oldAccount.CurrencyDb.Code = newAccount.Currency.Code;
+        oldAccount.CurrencyDb.Name = newAccount.Currency.Name;
+        _bankContext.Update(oldAccount);
+        _bankContext.SaveChanges();
+    }
+    
 }
