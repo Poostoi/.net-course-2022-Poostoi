@@ -138,10 +138,9 @@ public class ClientService
         return list.GetRange(0,count);
     }
 
-    public void UpdateAccount(Client client, Account newAccount)
+    public void UpdateAccount(Account newAccount)
     {
-        var clientDb =_bankContext.Clients.FirstOrDefault(c => c.Id == client.Id);
-        var oldAccount = clientDb.AccountsDbs.FirstOrDefault(a => a.Id == newAccount.Id);
+        var oldAccount =_bankContext.Accounts.FirstOrDefault(c => c.Id == newAccount.Id);
         oldAccount.Amount = newAccount.Amount;
         oldAccount.CurrencyDb.Code = newAccount.Currency.Code;
         oldAccount.CurrencyDb.Name = newAccount.Currency.Name;
