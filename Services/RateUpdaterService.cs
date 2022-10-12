@@ -22,9 +22,9 @@ public class RateUpdaterService
                     Amount = account.Amount + 5,
                     Currency = new Currency()
                     {
-                        Code = account.CurrencyDb.Code,
-                        Id = account.CurrencyDb.Id,
-                        Name = account.CurrencyDb.Name
+                        Code = account.Currency.Code,
+                        Id = account.Currency.Id,
+                        Name = account.Currency.Name
                     },
                     Id = account.Id
                 };

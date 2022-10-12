@@ -24,9 +24,9 @@ public class MapperService
     private IConfigurationProvider ConfigurateAccountInAccountDb()
     {
         return new MapperConfiguration(cfg => cfg.CreateMap<Account, AccountDb>()
-            .ForMember(desc => desc.ClientDb, src =>
+            .ForMember(desc => desc.Client, src =>
                 new TestDataGenerator().GeneratingClient())
-            .ForMember(desc => desc.CurrencyDb, src =>
+            .ForMember(desc => desc.Currency, src =>
                 new TestDataGenerator().GeneratingCurrency()));
     }
 

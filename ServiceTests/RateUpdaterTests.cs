@@ -11,24 +11,19 @@ public class RateUpdaterTests
     public void UpdaterRate_BankContext_True()
     {
         //arrange
-        var mapperService = new MapperService();
         var bankContext = new BankContext();
+        var convertService = new ConvertService();
         var rateUpdaterService = new RateUpdaterService();
+        var testData = new TestDataGenerator();
         var token = new CancellationToken();
-        var clients = new TestDataGenerator().GenerateListClient(20);
-        foreach (var client in clients)
+        var clients = new List<ClientDb>(20);
+        for(int i = 0;i<10;i++)
         {
-            client
-        }
-        var client = mapperService.MapperFromClientInClientDb.Map<ClientDb>
-            (new TestDataGenerator().GeneratingClient());
-        client.AccountsDbs = new List<AccountDb> { mapperService.MapperFromAccountInAccountDb.Map<AccountDb>(new TestDataGenerator().GeneratingAccount()) };
-
-        for (int i = 0; i < 20; i++)
-        {
-            bankContext.Clients.Add(client);
+            clients.Add(convertService.ConvertClientInClientDb(new TestDataGenerator().GeneratingClient()));
+            bankContext.Clients.Add(convertService.ConvertClientInClientDb(new TestDataGenerator().GeneratingClient()));
             bankContext.SaveChanges();
         }
+
         //act
 
         Task.Factory.StartNew(() =>

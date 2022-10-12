@@ -52,7 +52,7 @@ public class ClientService
     {
         var clientDb = _bankContext.Clients.FirstOrDefault(c => c.Id == clientId);
         var accountDb = _mapperService.MapperFromAccountInAccountDb.Map<AccountDb>(account);
-        accountDb.ClientDb = clientDb;
+        accountDb.Client = clientDb;
         clientDb.AccountsDbs.Add(accountDb);
         _bankContext.Update(clientDb);
         _bankContext.SaveChanges();
@@ -142,8 +142,8 @@ public class ClientService
     {
         var oldAccount =_bankContext.Accounts.FirstOrDefault(c => c.Id == newAccount.Id);
         oldAccount.Amount = newAccount.Amount;
-        oldAccount.CurrencyDb.Code = newAccount.Currency.Code;
-        oldAccount.CurrencyDb.Name = newAccount.Currency.Name;
+        oldAccount.Currency.Code = newAccount.Currency.Code;
+        oldAccount.Currency.Name = newAccount.Currency.Name;
         _bankContext.Update(oldAccount);
         _bankContext.SaveChanges();
     }
