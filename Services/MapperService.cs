@@ -21,6 +21,7 @@ public class MapperService
         MapperFromEmployeeInEmployeeDb = new Mapper(ConfigurateEmployeeInEmployeeDb());
         MapperFromEmployeeDbInEmployee = new Mapper(ConfigurateEmployeeDbInEmployee());
     }
+
     private IConfigurationProvider ConfigurateAccountInAccountDb()
     {
         return new MapperConfiguration(cfg => cfg.CreateMap<Account, AccountDb>()
@@ -45,16 +46,6 @@ public class MapperService
     private IConfigurationProvider ConfigurateClientInClientDb()
     {
         var account = new TestDataGenerator().GeneratingAccount();
-        var accountDb = this.MapperFromAccountInAccountDb.Map<AccountDb>(account); 
-        return new MapperConfiguration(cfg => cfg.CreateMap<Client, ClientDb>()
-            .ForMember(desc => desc.AccountsDbs, src =>
-            {
-                var accountDbs = new List<AccountDb>()
-                {
-                    accountDb
-                };
-            }));
+        return new MapperConfiguration(cfg => cfg.CreateMap<Client, ClientDb>());
     }
-
-    
 }

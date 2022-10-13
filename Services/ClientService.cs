@@ -142,8 +142,6 @@ public class ClientService
     {
         var oldAccount =_bankContext.Accounts.FirstOrDefault(c => c.Id == newAccount.Id);
         oldAccount.Amount = newAccount.Amount;
-        oldAccount.Currency.Code = newAccount.Currency.Code;
-        oldAccount.Currency.Name = newAccount.Currency.Name;
         _bankContext.Update(oldAccount);
         _bankContext.SaveChanges();
     }
