@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Migration;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Migration.Migrations
 {
     [DbContext(typeof(BankContext))]
-    partial class BankContextModelSnapshot : ModelSnapshot
+    [Migration("20221012074558_fixBaseModel1")]
+    partial class fixBaseModel1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +37,9 @@ namespace Migration.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("CurrencyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("СurrencyId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -133,13 +138,13 @@ namespace Migration.Migrations
             modelBuilder.Entity("ModelsDb.AccountDb", b =>
                 {
                     b.HasOne("ModelsDb.ClientDb", "Client")
-                        .WithMany("AccountsDbs")
+                        .WithMany("Accounts")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ModelsDb.CurrencyDb", "Currency")
-                        .WithMany("AccountDbs")
+                        .WithMany("Accounts")
                         .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -151,12 +156,12 @@ namespace Migration.Migrations
 
             modelBuilder.Entity("ModelsDb.ClientDb", b =>
                 {
-                    b.Navigation("AccountsDbs");
+                    b.Navigation("Accounts");
                 });
 
             modelBuilder.Entity("ModelsDb.CurrencyDb", b =>
                 {
-                    b.Navigation("AccountDbs");
+                    b.Navigation("Accounts");
                 });
 #pragma warning restore 612, 618
         }

@@ -52,7 +52,7 @@ public class ClientService
     {
         var clientDb = _bankContext.Clients.FirstOrDefault(c => c.Id == clientId);
         var accountDb = _mapperService.MapperFromAccountInAccountDb.Map<AccountDb>(account);
-        accountDb.ClientDb = clientDb;
+        accountDb.Client = clientDb;
         clientDb.AccountsDbs.Add(accountDb);
         _bankContext.Update(clientDb);
         _bankContext.SaveChanges();
@@ -110,8 +110,40 @@ public class ClientService
         return request.Select(clientDb => _mapperService.MapperFromClientDbInClient.Map<Client>(clientDb))
             .ToList();
     }
-
-    public void FromCsvFileInDatabase(string pathToFile, string fileName)
+    public List<Client> GetClientsLimit(ClientFilter clientFilter, int count)
     {
+        var request = _bankContext.Clients.Select(c => c);
+
+        if (clientFilter.Name != null && clientFilter.Name != "")
+            request = request.Where(c =>
+                c.Name == clientFilter.Name);
+        if (clientFilter.Surname != null && clientFilter.Surname != "")
+            request = request.Where(c =>
+                c.Surname == clientFilter.Surname);
+        if (clientFilter.NumberPhone != 0)
+            request = request.Where(c =>
+                c.NumberPhone == clientFilter.NumberPhone);
+        if (clientFilter.PassportId != 0)
+            request = request.Where(c =>
+                c.PassportId == clientFilter.PassportId);
+        if (clientFilter.DateStart != new DateTime())
+            request = request.Where(c =>
+                c.DateBirth >= clientFilter.DateStart);
+        if (clientFilter.DateEnd != new DateTime())
+            request = request.Where(c =>
+                c.DateBirth <= clientFilter.DateEnd);
+        var list = request.Select(clientDb => _mapperService.MapperFromClientDbInClient.Map<Client>(clientDb))
+            .ToList();
+        
+        return list.GetRange(0,count);
     }
+
+    public void UpdateAccount(Account newAccount)
+    {
+        var oldAccount =_bankContext.Accounts.FirstOrDefault(c => c.Id == newAccount.Id);
+        oldAccount.Amount = newAccount.Amount;
+        _bankContext.Update(oldAccount);
+        _bankContext.SaveChanges();
+    }
+    
 }

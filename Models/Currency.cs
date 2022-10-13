@@ -2,6 +2,7 @@
 
 public class Currency
 {
+    public List<Account> Accounts { get; set; }
     public Guid Id { get; set; }
     public int Code { get; set; }
     public string Name { get; set; }
