@@ -21,7 +21,7 @@ public class CashDispenserServiceTests
     }
 
     [Test]
-    public async Task Test()
+    public async Task TestAsync()
     {
         ThreadPool.SetMaxThreads(10, 10);
         ThreadPool.GetAvailableThreads(out var worker, out var completition);
@@ -30,15 +30,15 @@ public class CashDispenserServiceTests
         var listTask = new List<Task>();
         for (int i = 0; i < 5; i++)
         {
-            listTask.Add( Test2(token, worker));
+            listTask.Add(CreateTask(token, worker));
             Console.WriteLine($"{worker.ToString()}");
             Task.Delay(1000).Wait();
         }
     }
 
-    private  Task Test2(CancellationTokenSource token, int worker)
+    private async Task CreateTask(CancellationTokenSource token, int worker)
     {
-        return  Task.Run(() =>
+        await Task.Run(() =>
         {
             while (!token.IsCancellationRequested)
             {
