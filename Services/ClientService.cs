@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Migration;
 using Models;
 using ModelsDb;
@@ -26,16 +27,16 @@ public class ClientService
     }
 
 
-    public Client GetClient(Guid clientId)
+    public async Task<Client> GetClient(Guid clientId)
     {
-        var clientDb = _bankContext.Clients.FirstOrDefault(c => c.Id == clientId);
+        var clientDb = await _bankContext.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
         if (clientDb == null) return null;
         return _mapperService.MapperFromClientDbInClient.Map<Client>(clientDb);
     }
 
-    public void AddClient(Client client)
+    public async void AddClient(Client client)
     {
-        _bankContext.Clients.Add(_mapperService.MapperFromClientInClientDb.Map<ClientDb>(client));
+        await  _bankContext.Clients.AddAsync(_mapperService.MapperFromClientInClientDb.Map<ClientDb>(client));
         _bankContext.SaveChanges();
     }
 
@@ -48,9 +49,9 @@ public class ClientService
         _clientStorage.Add(client);
     }
 
-    public void AddAccount(Guid clientId, Account account)
+    public async void AddAccount(Guid clientId, Account account)
     {
-        var clientDb = _bankContext.Clients.FirstOrDefault(c => c.Id == clientId);
+        var clientDb = await _bankContext.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
         var accountDb = _mapperService.MapperFromAccountInAccountDb.Map<AccountDb>(account);
         accountDb.Client = clientDb;
         clientDb.AccountsDbs.Add(accountDb);
@@ -58,9 +59,9 @@ public class ClientService
         _bankContext.SaveChanges();
     }
 
-    public void ChangeClient(Guid clientId, Client client)
+    public async void ChangeClient(Guid clientId, Client client)
     {
-        var clientInDatabase = _bankContext.Clients.FirstOrDefault(c => c.Id == clientId);
+        var clientInDatabase = await _bankContext.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
         clientInDatabase.NumberPhone = client.NumberPhone;
         clientInDatabase.Bonus = client.Bonus;
         clientInDatabase.Name = client.Name;
@@ -138,9 +139,9 @@ public class ClientService
         return list.GetRange(0,count);
     }
 
-    public void UpdateAccount(Account newAccount)
+    public async void UpdateAccount(Account newAccount)
     {
-        var oldAccount =_bankContext.Accounts.FirstOrDefault(c => c.Id == newAccount.Id);
+        var oldAccount = await _bankContext.Accounts.FirstOrDefaultAsync(c => c.Id == newAccount.Id);
         oldAccount.Amount = newAccount.Amount;
         _bankContext.Update(oldAccount);
         _bankContext.SaveChanges();

@@ -52,7 +52,7 @@ public class ClientServiceTests
     }
     
     [Test]
-    public void ChangeClient_Client_NotEqual()
+    public async Task ChangeClient_Client_NotEqual()
     {
         //arrange
         var clientDbOld = new TestDataGenerator().GeneratingClient();
@@ -62,11 +62,13 @@ public class ClientServiceTests
 
         //act
         clientService.AddClient(clientDbOld);
-        var oldClientInDB = clientService.GetClient(clientDbOld.Id);
+        var oldClientInDB = await clientService.GetClient(clientDbOld.Id);
         var oldPassportId = oldClientInDB.PassportId;
         clientService.ChangeClient(clientDbOld.Id,clientDbNew);
+        var newClient = await clientService.GetClient(clientDbOld.Id);
+        
         //assert
-        Assert.False(clientService.GetClient(clientDbOld.Id).PassportId.Equals(oldPassportId));
+        Assert.False(newClient.PassportId.Equals(oldPassportId));
     }
     [Test]
     public void DeleteClient_Client_NotClient()

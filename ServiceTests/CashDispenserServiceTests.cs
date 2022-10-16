@@ -30,7 +30,9 @@ public class CashDispenserServiceTests
         var listTask = new List<Task>();
         for (int i = 0; i < 5; i++)
         {
-            listTask.Add(CreateTask(token, worker));
+            Task task = CreateTask(token, worker);
+            await task;
+            listTask.Add(task);
             Console.WriteLine($"{worker.ToString()}");
             Task.Delay(1000).Wait();
         }
