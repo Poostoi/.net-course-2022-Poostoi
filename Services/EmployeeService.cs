@@ -33,13 +33,13 @@ public class EmployeeService
         return _mapperService.MapperFromEmployeeDbInEmployee.Map<Employee>(employeeDb);
     }
 
-    public async void AddEmployee(Employee employee)
+    public async Task AddEmployee(Employee employee)
     {
         await _bankContext.Employees.AddAsync(_mapperService.MapperFromEmployeeInEmployeeDb.Map<EmployeeDb>(employee));
-        _bankContext.SaveChanges();
+        await _bankContext.SaveChangesAsync();
     }
 
-    public async void ChangeEmployee(Guid employeeId, Employee employee)
+    public async Task ChangeEmployee(Guid employeeId, Employee employee)
     {
         var employeeIdDatabase = await _bankContext.Employees.FirstOrDefaultAsync(e => e.Id == employeeId);
         employeeIdDatabase.Name = employee.Name;
@@ -50,14 +50,14 @@ public class EmployeeService
         employeeIdDatabase.Salary = employee.Salary;
         employeeIdDatabase.Bonus = employee.Bonus;
         _bankContext.Update(employeeIdDatabase);
-        _bankContext.SaveChanges();
+        await _bankContext.SaveChangesAsync();
     }
 
-    public async void RemoveEmployee(Guid employeeId)
+    public async Task RemoveEmployee(Guid employeeId)
     {
         var employeeIdDatabase = await _bankContext.Employees.FirstOrDefaultAsync(e => e.Id == employeeId);
         _bankContext.Employees.Remove(employeeIdDatabase);
-        _bankContext.SaveChanges();
+        await _bankContext.SaveChangesAsync();
     }
 
     public List<Employee> GetEmployees(EmployeeFilter employeeFilter)

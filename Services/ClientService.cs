@@ -34,10 +34,10 @@ public class ClientService
         return _mapperService.MapperFromClientDbInClient.Map<Client>(clientDb);
     }
 
-    public async void AddClient(Client client)
+    public async Task AddClient(Client client)
     {
-        await  _bankContext.Clients.AddAsync(_mapperService.MapperFromClientInClientDb.Map<ClientDb>(client));
-        _bankContext.SaveChanges();
+        await _bankContext.Clients.AddAsync(_mapperService.MapperFromClientInClientDb.Map<ClientDb>(client));
+        await _bankContext.SaveChangesAsync();
     }
 
     public void AddAccount(Client client)
@@ -49,17 +49,17 @@ public class ClientService
         _clientStorage.Add(client);
     }
 
-    public async void AddAccount(Guid clientId, Account account)
+    public async Task AddAccount(Guid clientId, Account account)
     {
         var clientDb = await _bankContext.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
         var accountDb = _mapperService.MapperFromAccountInAccountDb.Map<AccountDb>(account);
         accountDb.Client = clientDb;
         clientDb.AccountsDbs.Add(accountDb);
         _bankContext.Update(clientDb);
-        _bankContext.SaveChanges();
+        await _bankContext.SaveChangesAsync();
     }
 
-    public async void ChangeClient(Guid clientId, Client client)
+    public async Task ChangeClient(Guid clientId, Client client)
     {
         var clientInDatabase = await _bankContext.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
         clientInDatabase.NumberPhone = client.NumberPhone;
@@ -69,20 +69,21 @@ public class ClientService
         clientInDatabase.DateBirth = client.DateBirth;
         clientInDatabase.PassportId = client.PassportId;
         _bankContext.Update(clientInDatabase);
-        _bankContext.SaveChanges();
+        await _bankContext.SaveChangesAsync();
     }
 
-    public void RemoveClient(Guid clientId)
+    public async Task RemoveClient(Guid clientId)
     {
         _bankContext.Clients.Remove(_bankContext.Clients.FirstOrDefault(c => c.Id == clientId));
-        _bankContext.SaveChanges();
+        await _bankContext.SaveChangesAsync();
     }
 
-    public void RemoveAccount(Client client, Account account)
+    public async Task RemoveAccount(Client client, Account account)
     {
         var accountDb = _mapperService.MapperFromAccountInAccountDb.Map<AccountDb>(account);
-        _bankContext.Clients.FirstOrDefault(c => c.Id == client.Id).AccountsDbs.Remove(accountDb);
-        _bankContext.SaveChanges();
+        var clientDb = await _bankContext.Clients.FirstOrDefaultAsync(c => c.Id == client.Id);
+        clientDb.AccountsDbs.Remove(accountDb);
+        await _bankContext.SaveChangesAsync();
     }
 
     public List<Client> GetClients(ClientFilter clientFilter)
@@ -111,6 +112,7 @@ public class ClientService
         return request.Select(clientDb => _mapperService.MapperFromClientDbInClient.Map<Client>(clientDb))
             .ToList();
     }
+
     public List<Client> GetClientsLimit(ClientFilter clientFilter, int count)
     {
         var request = _bankContext.Clients.Select(c => c);
@@ -135,16 +137,15 @@ public class ClientService
                 c.DateBirth <= clientFilter.DateEnd);
         var list = request.Select(clientDb => _mapperService.MapperFromClientDbInClient.Map<Client>(clientDb))
             .ToList();
-        
-        return list.GetRange(0,count);
+
+        return list.GetRange(0, count);
     }
 
-    public async void UpdateAccount(Account newAccount)
+    public async Task UpdateAccount(Account newAccount)
     {
         var oldAccount = await _bankContext.Accounts.FirstOrDefaultAsync(c => c.Id == newAccount.Id);
         oldAccount.Amount = newAccount.Amount;
         _bankContext.Update(oldAccount);
-        _bankContext.SaveChanges();
+        await _bankContext.SaveChangesAsync();
     }
-    
 }
