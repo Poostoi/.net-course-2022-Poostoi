@@ -24,7 +24,7 @@ public class BankContext : DbContext
                                  "Port = 5432;" +
                                  "Database = postgres;" +
                                  "Username = postgres;" +
-                                 "Password = 37242");
+                                 "Password = 1111");
         
     }
     
