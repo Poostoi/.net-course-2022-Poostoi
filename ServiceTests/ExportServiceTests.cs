@@ -23,7 +23,7 @@ public class ExportServiceTests
     }
 
     [Test]
-    public void FromCsvFileInDatabase_ListClient_ClientEqualsClientInDb()
+    public async Task FromCsvFileInDatabase_ListClient_ClientEqualsClientInDb()
     {
         //arrange
         var exportService = new ExportService();
@@ -42,7 +42,7 @@ public class ExportServiceTests
         {
             clientService.AddClient((Client)c);
         }
-        var expectedClient = new ClientService(new BankContext()).GetClient(client.Id);
+        var expectedClient = await new ClientService(new BankContext()).GetClient(client.Id);
         var result  = expectedClient.Name == client.Name&&
                       expectedClient.Surname == client.Surname&&
                       expectedClient.NumberPhone == client.NumberPhone&&

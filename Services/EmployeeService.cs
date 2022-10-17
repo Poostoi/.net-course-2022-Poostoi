@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Migration;
 using Models;
 using ModelsDb;
@@ -25,22 +26,22 @@ public class EmployeeService
         _mapperService = new MapperService();
     }
 
-    public Employee GetEmployee(Guid employeeId)
+    public async Task<Employee> GetEmployee(Guid employeeId)
     {
-        var employeeDb = _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
+        var employeeDb = await _bankContext.Employees.FirstOrDefaultAsync(e => e.Id == employeeId);
         if (employeeDb == null) return null;
         return _mapperService.MapperFromEmployeeDbInEmployee.Map<Employee>(employeeDb);
     }
 
-    public void AddEmployee(Employee employee)
+    public async Task AddEmployee(Employee employee)
     {
-        _bankContext.Employees.Add(_mapperService.MapperFromEmployeeInEmployeeDb.Map<EmployeeDb>(employee));
-        _bankContext.SaveChanges();
+        await _bankContext.Employees.AddAsync(_mapperService.MapperFromEmployeeInEmployeeDb.Map<EmployeeDb>(employee));
+        await _bankContext.SaveChangesAsync();
     }
 
-    public void ChangeEmployee(Guid employeeId, Employee employee)
+    public async Task ChangeEmployee(Guid employeeId, Employee employee)
     {
-        var employeeIdDatabase = _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
+        var employeeIdDatabase = await _bankContext.Employees.FirstOrDefaultAsync(e => e.Id == employeeId);
         employeeIdDatabase.Name = employee.Name;
         employeeIdDatabase.Surname = employee.Surname;
         employeeIdDatabase.DateBirth = employee.DateBirth;
@@ -49,14 +50,14 @@ public class EmployeeService
         employeeIdDatabase.Salary = employee.Salary;
         employeeIdDatabase.Bonus = employee.Bonus;
         _bankContext.Update(employeeIdDatabase);
-        _bankContext.SaveChanges();
+        await _bankContext.SaveChangesAsync();
     }
 
-    public void RemoveEmployee(Guid employeeId)
+    public async Task RemoveEmployee(Guid employeeId)
     {
-        var employeeIdDatabase = _bankContext.Employees.FirstOrDefault(e => e.Id == employeeId);
+        var employeeIdDatabase = await _bankContext.Employees.FirstOrDefaultAsync(e => e.Id == employeeId);
         _bankContext.Employees.Remove(employeeIdDatabase);
-        _bankContext.SaveChanges();
+        await _bankContext.SaveChangesAsync();
     }
 
     public List<Employee> GetEmployees(EmployeeFilter employeeFilter)

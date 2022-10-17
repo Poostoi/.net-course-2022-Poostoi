@@ -45,7 +45,7 @@ public class EmployeeServiceTests
 
 
     [Test]
-    public void ChangeEmployee_Employee_NotEqual()
+    public async Task ChangeEmployee_Employee_NotEqual()
     {
         //arrange
         var employeeOld = new TestDataGenerator().GeneratingEmployee();
@@ -54,11 +54,12 @@ public class EmployeeServiceTests
 
         //act
         employeeService.AddEmployee(employeeOld);
-        var oldEmployeeDbInDB = employeeService.GetEmployee(employeeOld.Id);
+        var oldEmployeeDbInDB = await employeeService.GetEmployee(employeeOld.Id);
         var oldPassportId = oldEmployeeDbInDB.PassportId;
         employeeService.ChangeEmployee(employeeOld.Id, employeeNew);
+        var newEmployee = await employeeService.GetEmployee(employeeOld.Id);
         //assert
-        Assert.False(employeeService.GetEmployee(employeeOld.Id).PassportId.Equals(oldPassportId));
+        Assert.False(newEmployee.PassportId.Equals(oldPassportId));
     }
 
     [Test]
