@@ -17,26 +17,25 @@ public class ClientControllers : ControllerBase
     }
 
     [HttpGet("GetClient")]
-    public Client GetClient(Guid Id)
+    public async Task<Client> GetClient(Guid Id)
     {
-        var client = _clientService.GetClient(Id);
-        return client;
+        return await _clientService.GetClient(Id);
     }
 
     [HttpPost("AddClient")]
-    public void AddClient(Client client)
+    public async Task AddClient(Client client)
     {
-        _clientService.AddClient(client);
+        await _clientService.AddClient(client);
     }
 
     [HttpDelete("DeleteClient")]
-    public void DeleteClient(Guid id)
+    public async Task DeleteClient(Guid id)
     {
-        _clientService.RemoveClient(id);
+        await _clientService.RemoveClient(id);
     }
     [HttpPut("UpdateClient")]
-    public void UpdateClient(Guid id, Client client)
+    public async Task UpdateClient(Guid id, Client client)
     {
-        _clientService.ChangeClient(id,client);
+        await _clientService.ChangeClient(id,client);
     }
 }
