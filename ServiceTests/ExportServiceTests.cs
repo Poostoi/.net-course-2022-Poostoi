@@ -23,6 +23,22 @@ public class ExportServiceTests
     }
 
     [Test]
+    public async Task ExportClientsInFile_ListClient_True()
+    {
+        //arrange
+        var exportService = new ExportService();
+        var clients = new TestDataGenerator().GenerateListClient(2);
+        clients[0].Accounts = null;
+        clients[1].Accounts = null;
+        var path = Path.Combine("C:", "test", "clientsSerialization.txt");
+        //act
+        exportService.ExportClientInFile(path, clients);
+        var clientsFromFile = await exportService.ImportClientFromFile(path);
+        //assert
+        Assert.True(true);
+    }
+
+    [Test]
     public async Task FromCsvFileInDatabase_ListClient_ClientEqualsClientInDb()
     {
         //arrange
@@ -42,13 +58,14 @@ public class ExportServiceTests
         {
             clientService.AddClient((Client)c);
         }
+
         var expectedClient = await new ClientService(new BankContext()).GetClient(client.Id);
-        var result  = expectedClient.Name == client.Name&&
-                      expectedClient.Surname == client.Surname&&
-                      expectedClient.NumberPhone == client.NumberPhone&&
-                      expectedClient.Bonus == client.Bonus&&
-                      expectedClient.DateBirth == client.DateBirth&&
-                      expectedClient.Id == client.Id;
+        var result = expectedClient.Name == client.Name &&
+                     expectedClient.Surname == client.Surname &&
+                     expectedClient.NumberPhone == client.NumberPhone &&
+                     expectedClient.Bonus == client.Bonus &&
+                     expectedClient.DateBirth == client.DateBirth &&
+                     expectedClient.Id == client.Id;
         //assert
         Assert.True(result);
     }

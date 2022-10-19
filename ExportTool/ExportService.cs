@@ -4,6 +4,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Migration;
 using Models;
+using Newtonsoft.Json;
 using Services;
 
 namespace ExportTool;
@@ -71,5 +72,20 @@ public class ExportService
         }
 
         return clientReader;
+    }
+
+    public void ExportClientInFile(string path, List<Client> clients)
+    {
+        using var fileStream = new FileStream(path, FileMode.OpenOrCreate);
+        using var writer= new StreamWriter(fileStream, System.Text.Encoding.UTF8);
+        var text = JsonConvert.SerializeObject(clients);
+        writer.WriteAsync(text);
+    }
+    public async Task<Client[]> ImportClientFromFile(string path)
+    {
+        using var fileStream = new FileStream(path, FileMode.OpenOrCreate);
+        using var reader= new StreamReader(fileStream, System.Text.Encoding.UTF8);
+        var dataInFile = await reader.ReadToEndAsync();
+        return JsonConvert.DeserializeObject<Client[]>(dataInFile);
     }
 }
