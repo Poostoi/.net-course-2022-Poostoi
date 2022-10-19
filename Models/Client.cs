@@ -2,7 +2,7 @@
 
 public class Client : Person
 {
-    public List<Account> Accounts { get; set; }
+    public List<Account>? Accounts { get; set; }
     public int NumberPhone { get; set; }
 
     public override bool Equals(object? obj)
