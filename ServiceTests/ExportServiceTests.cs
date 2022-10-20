@@ -23,7 +23,7 @@ public class ExportServiceTests
     }
 
     [Test]
-    public async Task ExportClientsInFile_ListClient_True()
+    public async Task ExportClientsInFile_ListClient_NotNullClientsFromFile()
     {
         //arrange
         var exportService = new ExportService();
@@ -35,7 +35,7 @@ public class ExportServiceTests
         exportService.ExportClientInFile(path, clients);
         var clientsFromFile = await exportService.ImportClientFromFile(path);
         //assert
-        Assert.True(true);
+        Assert.NotNull(clientsFromFile);
     }
 
     [Test]
