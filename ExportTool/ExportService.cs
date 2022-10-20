@@ -4,6 +4,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Migration;
 using Models;
+using Newtonsoft.Json;
 using Services;
 
 namespace ExportTool;
@@ -28,7 +29,7 @@ public class ExportService
                     { Delimiter = ";" };
                 using (var writer = new CsvWriter(streamWriter, config))
                 {
-                    if(clientsInFile==null)
+                    if (clientsInFile == null)
                     {
                         writer.WriteRecords(clients);
                         writer.Flush();
@@ -40,6 +41,7 @@ public class ExportService
                             writer.WriteRecord(client);
                             writer.NextRecord();
                         }
+
                         writer.Flush();
                     }
                 }
@@ -61,7 +63,7 @@ public class ExportService
                 using (var reader = new CsvReader(streamReader, config))
                 {
                     reader.Read();
-                    if(reader.Parser.Count!=0)
+                    if (reader.Parser.Count != 0)
                     {
                         reader.ReadHeader();
                         clientReader = reader.GetRecords<Client>().ToList();
@@ -71,5 +73,27 @@ public class ExportService
         }
 
         return clientReader;
+    }
+
+    public void ExportClientInFile(string path, List<Client> clients)
+    {
+        using (var fileStream = new FileStream(path, FileMode.Truncate))
+        {
+            using (var writer = new StreamWriter(fileStream, System.Text.Encoding.UTF8))
+            {
+                writer.Flush();
+                var text = JsonConvert.SerializeObject(clients);
+                writer.WriteAsync(text);
+                writer.Flush();
+            }
+        }
+    }
+
+    public async Task<Client[]> ImportClientFromFile(string path)
+    {
+        using var fileStream = new FileStream(path, FileMode.OpenOrCreate);
+        using var reader = new StreamReader(fileStream, System.Text.Encoding.UTF8);
+        var dataInFile = await reader.ReadToEndAsync();
+        return JsonConvert.DeserializeObject<Client[]>(dataInFile);
     }
 }
