@@ -2,6 +2,7 @@
 using Migration;
 using Models;
 using Services;
+using Services.ExceptionCraft;
 
 namespace BankApi.Controllers;
 
@@ -17,25 +18,43 @@ public class ClientControllers : ControllerBase
     }
 
     [HttpGet("GetClient")]
-    public async Task<Client> GetClient(Guid Id)
+    public async Task<ActionResult<Client>> GetClient(Guid Id)
     {
-        return await _clientService.GetClient(Id);
+        var client = await _clientService.GetClient(Id);
+        if (client != null)
+            return client;
+        return new NotFoundResult();
     }
 
     [HttpPost("AddClient")]
-    public async Task AddClient(Client client)
+    public async Task<ActionResult> AddClient(Client client)
     {
+        if (_clientService.GetClient(client.Id) != null)
+        {
+            return new BadRequestObjectResult(new AlreadyExistsException("Такой пользователь уже существует!"));
+        }
         await _clientService.AddClient(client);
+        return Ok();
     }
 
     [HttpDelete("DeleteClient")]
-    public async Task DeleteClient(Guid id)
+    public async Task<ActionResult> DeleteClient(Guid id)
     {
+        if (_clientService.GetClient(id) != null)
+        {
+            return new BadRequestObjectResult(new DoesNotExistException("Такой пользователь не существует!"));
+        }
         await _clientService.RemoveClient(id);
+        return Ok();
     }
     [HttpPut("UpdateClient")]
-    public async Task UpdateClient(Guid id, Client client)
+    public async Task<ActionResult> UpdateClient(Guid id, Client client)
     {
+        if (_clientService.GetClient(id) != null)
+        {
+            return new BadRequestObjectResult(new DoesNotExistException("Такой пользователь не существует!"));
+        }
         await _clientService.ChangeClient(id,client);
+        return Ok();
     }
 }
