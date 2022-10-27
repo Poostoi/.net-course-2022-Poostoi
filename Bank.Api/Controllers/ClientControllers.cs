@@ -23,13 +23,13 @@ public class ClientControllers : ControllerBase
         var client = await _clientService.GetClient(Id);
         if (client != null)
             return client;
-        return new NotFoundResult();
+        return new BadRequestObjectResult(new DoesNotExistException("Такой пользователь не существует!"));
     }
 
     [HttpPost("AddClient")]
     public async Task<ActionResult> AddClient(Client client)
     {
-        if (_clientService.GetClient(client.Id) != null)
+        if ( await _clientService.GetClient(client.Id) != null)
         {
             return new BadRequestObjectResult(new AlreadyExistsException("Такой пользователь уже существует!"));
         }
@@ -40,7 +40,7 @@ public class ClientControllers : ControllerBase
     [HttpDelete("DeleteClient")]
     public async Task<ActionResult> DeleteClient(Guid id)
     {
-        if (_clientService.GetClient(id) != null)
+        if (await _clientService.GetClient(id) == null)
         {
             return new BadRequestObjectResult(new DoesNotExistException("Такой пользователь не существует!"));
         }
@@ -50,7 +50,7 @@ public class ClientControllers : ControllerBase
     [HttpPut("UpdateClient")]
     public async Task<ActionResult> UpdateClient(Guid id, Client client)
     {
-        if (_clientService.GetClient(id) != null)
+        if (await _clientService.GetClient(id) == null)
         {
             return new BadRequestObjectResult(new DoesNotExistException("Такой пользователь не существует!"));
         }

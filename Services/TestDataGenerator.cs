@@ -77,8 +77,8 @@ public class TestDataGenerator
         var client = new Client()
         {
             Id = Guid.NewGuid(),
-            Surname = new Faker("ru").Name.FirstName(Name.Gender.Male),
-            Name = new Faker("ru").Name.LastName(Name.Gender.Male),
+            Surname = new Faker("ru").Name.LastName(Name.Gender.Male),
+            Name = new Faker("ru").Name.FirstName(Name.Gender.Male),
             DateBirth = new DateTime(
                 new Random().Next(1900, 2000),
                 new Random().Next(1, 12),

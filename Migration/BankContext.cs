@@ -18,13 +18,11 @@ public class BankContext : DbContext
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // var connectionString = ConfigurationManager
-            // .ConnectionStrings["Postgres"].ConnectionString;
         optionsBuilder.UseNpgsql("Host=localhost;" +
                                  "Port = 5432;" +
                                  "Database = postgres;" +
                                  "Username = postgres;" +
-                                 "Password = 1111");
+                                 "Password = 37242");
         
     }
     
